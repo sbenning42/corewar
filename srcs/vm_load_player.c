@@ -15,7 +15,6 @@ void            vm_load_player_i(t_list *l)
         p->id = -1;
         return ;
     }
-    ft_printf("DEBUG[%zu][%zu]\n", p->obj_file->binary_size, sizeof(header_t));
     ft_memcpy(&p->header, p->obj_file->binary, sizeof(header_t));
     p->header.magic = INT_LITTLE2BIG(p->header.magic);
     p->header.prog_size = INT_LITTLE2BIG(p->header.prog_size);

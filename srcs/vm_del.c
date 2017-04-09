@@ -6,7 +6,6 @@ void            vm_del_player(void *content, size_t size)
 
     vv_enter("vm_del_player");
     player = (t_player *)content;
-    vv_msg("TODO: Del header");
     close_file(&player->obj_file);
     free(player);
     vv_quit("vm_del_player");

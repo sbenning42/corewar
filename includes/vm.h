@@ -166,6 +166,7 @@ struct                          s_vm
     t_cbuff                     memory;
     t_list                      *player;
     t_list                      *process;
+    unsigned long               tic;
 };
 
 struct                          s_argd
@@ -187,6 +188,7 @@ struct                          s_efatal
 
 t_vm                            *s_vm(void);
 void                            vm_setup(void);
+int                             vm_finish(void);
 void                            vm_loop(void);
 void                            vm_cleanup(void);
 
@@ -255,6 +257,12 @@ void                            cbuff_del(t_cbuff *cb);
 */
 
 void                            vm_load_player_i(t_list *l);
+
+/*
+**                              *** vm_load_process.c ***
+*/
+
+void                            vm_load_process_i(t_list *l);
 
 /*
 **                              *** vm_fatal.c ***

@@ -45,16 +45,30 @@ void            vm_load_memory(void)
     vv_quit("vm_load_memory");
 }
 
+static int      id_neg(void *ref, void *c, size_t s)
+{
+    if (((t_player *)c)->id < 0)
+        return (1);
+    return (0);
+    (void)ref;
+    (void)s;
+}
+
 void            vm_load_player(void)
 {
+    t_player    p;
+
     vv_enter("vm_load_player");
     ft_lstiter(VM_A_PLAYER, vm_load_player_i);
+    ft_bzero(&p, sizeof(t_player));
+    p.id = -1;
+    ft_lstdel_if(&VM_A_PLAYER, &p, id_neg, vm_del_player);
     vv_quit("vm_load_player");
 }
 
 void            vm_load_root_process(void)
 {
     vv_enter("vm_load_root_process");
-    vv_msg("TODO");
+    ft_lstiter(VM_A_PLAYER, vm_load_process_i);
     vv_quit("vm_load_root_process");
 }

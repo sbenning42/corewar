@@ -47,6 +47,7 @@ SRC =			main.c\
                 vm_create_player.c\
                 vm_cbuff.c\
                 vm_load_player.c\
+                vm_load_process.c\
                 vm_fatal.c\
                 vm_del.c\
                 vm_vverbose.c

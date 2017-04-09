@@ -26,6 +26,8 @@ void            vm_load_binary(void)
     size_t      offset;
 
     vv_enter("vm_load_binary");
+    if (VM_A_CONFIG.nb_player < 1)
+        return ;
     offset = VM_A_CONFIG.mem_size / VM_A_CONFIG.nb_player;
     vm_rec_load_binary(VM_A_PLAYER, 0, offset);
     vv_quit("vm_load_binary");
