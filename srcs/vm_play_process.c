@@ -28,7 +28,7 @@ void				fill_instruction_wo_ocp(t_process *p)
 		vm_fatal(VM_EMALLOC);
 	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
 	p->instruction->args = p->instruction->code + 1;
-	p->timer += p->instruction->op->cycle;
+//	p->timer += p->instruction->op->cycle;
 }
 
 size_t				get_args_size(t_process *p)
@@ -36,23 +36,35 @@ size_t				get_args_size(t_process *p)
 	size_t			size;
 	unsigned char	ocp;
 	unsigned char	mask;
+	unsigned char	arg;
 
 	size = 0;
 	ocp = *(unsigned char *)(p->pc + 1);
+    p->instruction->ocp = ocp;
 	mask = 0xc0;
 	while (ocp)
 	{
 		arg = ocp & mask;
-		if (arg == 1)
-		ocp << 2;
+		if (arg == 0x40)
+            size += 1;
+        else if (arg == 0x80)
+            size += p->instruction->op->label_size;
+        else if (arg == 0xc0)
+            size += 2;
+		ocp <<= 0x2;
 	}
+    return (size);
 }
 
 void				fill_instruction(t_process *p)
 {
-	size_t			size;
-
-	size = 2 + get_args_size(p);
+	p->instruction->size = 2 + get_args_size(p);
+	p->instruction->code = ft_memalloc(p->instruction->size);
+	if (!p->instruction->code)
+		vm_fatal(VM_EMALLOC);
+	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
+	p->instruction->args = p->instruction->code + 2;
+//	p->timer += p->instruction->op->cycle;
 }
 
 void				live_op_f(t_process *p)
@@ -64,37 +76,44 @@ void				live_op_f(t_process *p)
 
 void				ld_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 1;
+    fill_instruction(p);
 }
 
 void				st_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 2;
+    fill_instruction(p);
 }
 
 void				add_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 3;
+    fill_instruction(p);
 }
 
 void				sub_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 4;
+    fill_instruction(p);
 }
 
 void				and_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 5;
+    fill_instruction(p);
 }
 
 void				or_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 6;
+    fill_instruction(p);
 }
 
 void				xor_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 7;
+    fill_instruction(p);
 }
 
 void				zjmp_op_f(t_process *p)
@@ -106,12 +125,14 @@ void				zjmp_op_f(t_process *p)
 
 void				ldi_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 9;
+    fill_instruction(p);
 }
 
 void				sti_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 10;
+    fill_instruction(p);
 }
 
 void				fork_op_f(t_process *p)
@@ -123,12 +144,14 @@ void				fork_op_f(t_process *p)
 
 void				lld_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 12;
+    fill_instruction(p);
 }
 
 void				lldi_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 13;
+    fill_instruction(p);
 }
 
 void				lfork_op_f(t_process *p)
@@ -141,7 +164,8 @@ void				lfork_op_f(t_process *p)
 
 void				aff_op_f(t_process *p)
 {
-	(void)p;
+	p->instruction->op = g_op + 15;
+    fill_instruction(p);
 }
 
 static t_ins_reader	g_op_f[] = {\
@@ -171,7 +195,6 @@ static t_ins_reader	dispatch(void *pc)
 
 	opcode = *(unsigned char *)pc;
 	op = g_op;
-	ft_printf("DEBUG: [%x]\n", opcode);
 	while (op->opcode)
 	{
 		if (op->opcode == opcode)
@@ -191,7 +214,14 @@ void				vm_read_instruction(t_process *p)
 
 void			vm_play_instruction(t_process *p)
 {
-	free(p->instruction->code);
+    if (p->last_instruction)
+        free(p->last_instruction);
+	p->last_instruction = p->instruction->code;
+    p->size_instruction = p->instruction->size;
+    vv_msg("TODO: Actually play instruction in vm_play_process");
+    p->pc += p->instruction->size;
+    vv_msg("TODO: Use cbuff to circular handle pc moving. . .");
+    ft_print_legit_memory(p->last_instruction, p->size_instruction);
 	free(p->instruction);
 	p->instruction = NULL;
 }

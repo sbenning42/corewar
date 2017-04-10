@@ -104,11 +104,11 @@ void        ft_print_legit_memory(void *m, size_t size)
 			if (*color)
 			{
 				ft_sprintf(fmt, *color);
-        		ft_print_memory_legit_set(m, i, size, "");
+       // 		ft_print_memory_legit_set(m, i, size, "");
 			}
 		}
-		else
-        	ft_print_memory_legit_set(m, i, size, "");
+	//	else
+      //  	ft_print_memory_legit_set(m, i, size, "");
         i += 64;
     }
 }
