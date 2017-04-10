@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/10 14:11:47 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/10 14:56:07 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,45 @@ void				noop_op_f(t_process *p)
 	(void)p;
 }
 
+void				fill_instruction_wo_ocp(t_process *p)
+{
+	p->instruction->code = ft_memalloc(p->instruction->size);
+	if (!p->instruction->code)
+		vm_fatal(VM_EMALLOC);
+	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
+	p->instruction->args = p->instruction->code + 1;
+	p->timer += p->instruction->op->cycle;
+}
+
+size_t				get_args_size(t_process *p)
+{
+	size_t			size;
+	unsigned char	ocp;
+	unsigned char	mask;
+
+	size = 0;
+	ocp = *(unsigned char *)(p->pc + 1);
+	mask = 0xc0;
+	while (ocp)
+	{
+		arg = ocp & mask;
+		if (arg == 1)
+		ocp << 2;
+	}
+}
+
+void				fill_instruction(t_process *p)
+{
+	size_t			size;
+
+	size = 2 + get_args_size(p);
+}
+
 void				live_op_f(t_process *p)
 {
 	p->instruction->op = g_op;
 	p->instruction->size = p->instruction->op->label_size + 1;
-	p->instruction->code = ft_memalloc(p->instruction->size);
-	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
-	if (!p->instruction->code)
-		vm_fatal(VM_EMALLOC);
-	p->instruction->args = p->instruction->code + 1;
-	p->pc += p->instruction->size;
-	p->timer += p->instruction->op->cycle;
-	ft_print_legit_memory(p->instruction->code, p->instruction->size);
+	fill_instruction_wo_ocp(p);
 }
 
 void				ld_op_f(t_process *p)
@@ -74,14 +101,7 @@ void				zjmp_op_f(t_process *p)
 {
 	p->instruction->op = g_op + 8;
 	p->instruction->size = p->instruction->op->label_size + 1;
-	p->instruction->code = ft_memalloc(p->instruction->size);
-	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
-	if (!p->instruction->code)
-		vm_fatal(VM_EMALLOC);
-	p->instruction->args = p->instruction->code + 1;
-	p->pc += p->instruction->size;
-	p->timer += p->instruction->op->cycle;
-	ft_print_legit_memory(p->instruction->code, p->instruction->size);
+	fill_instruction_wo_ocp(p);
 }
 
 void				ldi_op_f(t_process *p)
@@ -98,14 +118,7 @@ void				fork_op_f(t_process *p)
 {
 	p->instruction->op = g_op + 11;
 	p->instruction->size = p->instruction->op->label_size + 1;
-	p->instruction->code = ft_memalloc(p->instruction->size);
-	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
-	if (!p->instruction->code)
-		vm_fatal(VM_EMALLOC);
-	p->instruction->args = p->instruction->code + 1;
-	p->pc += p->instruction->size;
-	p->timer += p->instruction->op->cycle;
-	ft_print_legit_memory(p->instruction->code, p->instruction->size);
+	fill_instruction_wo_ocp(p);
 }
 
 void				lld_op_f(t_process *p)
@@ -120,16 +133,10 @@ void				lldi_op_f(t_process *p)
 
 void				lfork_op_f(t_process *p)
 {	
+
 	p->instruction->op = g_op + 14;
 	p->instruction->size = p->instruction->op->label_size + 1;
-	p->instruction->code = ft_memalloc(p->instruction->size);
-	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
-	if (!p->instruction->code)
-		vm_fatal(VM_EMALLOC);
-	p->instruction->args = p->instruction->code + 1;
-	p->pc += p->instruction->size;
-	p->timer += p->instruction->op->cycle;
-	ft_print_legit_memory(p->instruction->code, p->instruction->size);
+	fill_instruction_wo_ocp(p);
 }
 
 void				aff_op_f(t_process *p)
