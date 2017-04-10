@@ -25,3 +25,22 @@ void            vm_dump_player_i(t_list *l)
     vm_dump_header(&p->header);
     vv_quit("vm_dump_player");
 }
+
+void			vm_put_player_i(t_list *l)
+{
+	t_player	*p;
+
+	p = (t_player *)l->content;
+	ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",\
+			p->id, p->header.prog_size, p->header.prog_name, p->header.comment);
+}
+
+void		vm_put_players(void)
+{
+	ft_printf("Introducing contestants...\n");
+	ft_lstiter(VM_A_PLAYER, vm_put_player_i);
+}
+
+
+
+

@@ -20,7 +20,7 @@ static int      vm_player_get_id(void)
 {
     int         id;
 
-    id = 0;
+    id = 1;
     while (vm_player_is_id(id))
         ++id;
     return (id);

@@ -1,4 +1,4 @@
-#ifndef FT_GETOPT_h
+#ifndef FT_GETOPT_H
 # define FT_GETOPT_H
 
 # include "ft_lexer.h"

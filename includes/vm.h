@@ -203,6 +203,7 @@ void                            vm_dump(int fd);
 */
 
 void                            vm_dump_player_i(t_list *l);
+void							vm_put_players(void);
 
 /*
 **                              *** vm_load.c ***
@@ -265,6 +266,12 @@ void                            vm_load_player_i(t_list *l);
 void                            vm_load_process_i(t_list *l);
 
 /*
+**                              *** vm_play_process.c ***
+*/
+
+void							vm_play_process(t_list *l);
+
+/*
 **                              *** vm_fatal.c ***
 */
 
@@ -279,5 +286,6 @@ void                            vm_del_player(void *content, size_t size);
 void                            vm_del_process(void *content, size_t size);
 
 void                            ft_print_memory(void *m, size_t size);
+void                            ft_print_legit_memory(void *m, size_t size);
 
 #endif
