@@ -51,6 +51,7 @@ SRC =			main.c\
                 vm_play_process.c\
                 vm_fatal.c\
                 vm_del.c\
+                vm_print_memory.c\
                 vm_vverbose.c
 
 SRC_DIR =		srcs/

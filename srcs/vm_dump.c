@@ -74,7 +74,7 @@ static void     vm_dump_process(int fd)
         ft_printf("\tProcess:\n");
         p = (t_process *)l->content;
         ft_fprintf(fd, VM_PROCESS_DUMP,\
-                "PID", p->pid, "PC", p->pc, "Registre", p->registre,\
+                "PID", p->pid, "PC", p->pc, "Player", p->player, "Registre", p->registre,\
                 "Number Registre", p->reg_number, "Registre Size", p->reg_size,\
                 "Carry Value", p->carry, "Timer", p->timer, "Error", p->error,\
                 "Instruction", p->instruction,\

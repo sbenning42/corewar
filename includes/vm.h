@@ -62,11 +62,11 @@
 # define VM_MEM2                "%30s : %lu\n%30s : %lu\n%30s : %lu\n"
 # define VM_MEMORY_DUMP         VM_MEM1 VM_MEM2
 
-# define VM_PLAY1               "\t%30s : %d\n"
-# define VM_PLAY2               "\t%30s : %s\n\t%30s : %ld\n\t%30s : %p\n"
+# define VM_PLAY1               "\t%30s : %d\n\t%30s : %s\n\t%30s : %ld\n"
+# define VM_PLAY2               "\t%30s : %p\n\t%30s : %s\n"
 # define VM_PLAYER_DUMP         VM_PLAY1 VM_PLAY2
 
-# define VM_PROC1               "\t%30s : %u\n\t%30s : %p\n\t%30s : %p\n"
+# define VM_PROC1               "\t%30s : %u\n\t%30s : %p\n\t%30s : %p\n\t%30s : %p\n"
 # define VM_PROC2               "\t%30s : %u\n\t%30s : %u\n\t%30s : %u\n"
 # define VM_PROC3               "\t%30s : %lu\n\t%30s : %d\n\t%30s : %p\n"
 # define VM_PROC4               "\t%30s : %p\n\t%30s : %u\n\t%30s : %lu\n"
@@ -108,6 +108,7 @@ struct                          s_process
 {
     pid_t                       pid;
     void                        *pc;
+    t_player                    *player;
     int                         registre[REG_NUMBER];
     unsigned int                reg_number;
     unsigned int                reg_size;
@@ -137,6 +138,7 @@ struct                          s_player
     t_file                      *obj_file;
     long int                    live;
     void                        *pc;
+    char                        *color;
 };
 
 struct                          s_vm_config
@@ -287,5 +289,6 @@ void                            vm_del_process(void *content, size_t size);
 
 void                            ft_print_memory(void *m, size_t size);
 void                            ft_print_legit_memory(void *m, size_t size);
+void                            vm_print_memory(void *m, size_t s, char *c, int rel);
 
 #endif

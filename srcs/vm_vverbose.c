@@ -23,7 +23,7 @@ void        vv_msg(char *msg)
 
 void        vv_dump(void)
 {
-    if (!PI_ISOPT(proginfo()->opt, VM_VERBOSE_OPT))
+    if (!PI_ISOPT(proginfo()->opt, VM_VVERBOSE_OPT))
         return ;
     vm_dump(1);
 }

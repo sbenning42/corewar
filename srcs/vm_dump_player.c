@@ -20,7 +20,8 @@ void            vm_dump_player_i(t_list *l)
             "Id", p->id,\
             "File Name", p->obj_file->name,\
             "Number Live", p->live,\
-            "Program address", p->pc\
+            "Program address", p->pc,\
+            "Player Color", p->color\
             );
     vm_dump_header(&p->header);
     vv_quit("vm_dump_player");

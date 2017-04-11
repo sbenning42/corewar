@@ -18,7 +18,7 @@ void        ft_print_memory_set(void *m, size_t i, size_t size)
     while (j < 64 && i + j < size)
     {
         o = *(unsigned char *)(m + i + j);
-        ft_printf("%02x ", o);
+        ft_printf((o ? "{gr}%02x{eoc} " : "%02x "), o);
         ++j;
     }
 	ft_printf("\n");

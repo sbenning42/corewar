@@ -18,7 +18,9 @@ extern t_op			g_op[];
 
 void				noop_op_f(t_process *p)
 {
-	(void)p;
+    p->pc += 1;
+    if (p->pc > p->player->pc + VM_A_CONFIG.max_player_size)
+        p->pc = p->player->pc;
 }
 
 void				fill_instruction_wo_ocp(t_process *p)
@@ -220,8 +222,10 @@ void			vm_play_instruction(t_process *p)
     p->size_instruction = p->instruction->size;
     vv_msg("TODO: Actually play instruction in vm_play_process");
     p->pc += p->instruction->size;
+    if (p->pc > p->player->pc + VM_A_CONFIG.max_player_size)
+        p->pc = p->player->pc;
     vv_msg("TODO: Use cbuff to circular handle pc moving. . .");
-    ft_print_legit_memory(p->last_instruction, p->size_instruction);
+    vm_print_memory(p->last_instruction, p->size_instruction, p->player->color, 1);
 	free(p->instruction);
 	p->instruction = NULL;
 }
@@ -232,11 +236,11 @@ void			vm_play_process(t_list *l)
 
 	p = l->content;
 	if (p->timer > 0)
-	{
-		p->timer -= 1;
+    {
+	    p->timer -= 1;
 		return ;
-	}
-	if (p->instruction)
+    }
+    else if (p->instruction)
 		vm_play_instruction(p);
 	vm_read_instruction(p);
 }

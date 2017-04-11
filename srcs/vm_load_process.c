@@ -16,6 +16,7 @@ void            vm_load_process_i(t_list *l)
     vv_enter("vm_load_process_i");
     p = (t_player *)l->content;
     ft_bzero(&process, sizeof(t_process));
+    process.player = p;
     process.pid = vm_unique_pid();
     process.pc = p->pc;
     ft_bzero(process.registre, sizeof(int) * REG_NUMBER);

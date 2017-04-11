@@ -1,5 +1,19 @@
 #include "vm.h"
 
+static char     *g_color[] = {\
+    "{blue}",\
+    "{red}",\
+    "{green}",\
+    "{yellow}"\
+};
+
+static char     *get_unique_color(void)
+{
+    static int  i;
+
+    return (g_color[i++ % TABSIZE(g_color, char *)]);
+}
+
 void            vm_load_player_i(t_list *l)
 {
     t_player    *p;
@@ -20,6 +34,7 @@ void            vm_load_player_i(t_list *l)
     p->header.prog_size = INT_LITTLE2BIG(p->header.prog_size);
     close(p->obj_file->fd);
     p->obj_file->fd = -1;
+    p->color = get_unique_color();
     (&VM_A_CONFIG)->nb_player += 1;
     vv_quit("vm_load_player_i");
 }

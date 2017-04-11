@@ -17,28 +17,25 @@ void                vm_setup(void)
     vm_load_player();
     vm_load_binary();
     vm_load_root_process();
-//    vv_dump();
+    vv_dump();
     vv_quit("vm_setup");
 }
 
 int                 vm_finish(void)
 {
-    vv_enter("vm_finish");
-    vv_msg("TODO");
+    vv_msg("TODO: Implement death of players");
     if (VM_A_CONFIG.dump > 0)
     {
         if (VM_SINGLE->tic >= (unsigned long)VM_A_CONFIG.dump)
         {
 			vm_put_players();
-			if (PI_ISOPT(proginfo()->opt, VM_VERBOSE_OPT))
+//			if (PI_ISOPT(proginfo()->opt, VM_VERBOSE_OPT))
             	ft_print_legit_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
-			else
-            	ft_print_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
-            vv_quit("vm_finish");
+//			else
+//            	ft_print_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
             return (1);
         }
     }
-    vv_quit("vm_finish");
     return (0);
 }
 
@@ -48,10 +45,9 @@ void                vm_loop(void)
     while (42)
     {
 		ft_lstiter(VM_A_PROCESS, vm_play_process);
-        vv_msg("TODO");
+        VM_SINGLE->tic += 1;
         if (vm_finish())
             break ;
-        VM_SINGLE->tic += 1;
     }
     vv_quit("vm_loop");
 }
