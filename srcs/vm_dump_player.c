@@ -19,7 +19,8 @@ void            vm_dump_player_i(t_list *l)
     ft_printf(VM_PLAYER_DUMP,\
             "Id", p->id,\
             "File Name", p->obj_file->name,\
-            "Number Live", p->live,\
+            "Number Live this Check", p->live,\
+            "Player Dead", p->dead,\
             "Program address", p->pc,\
             "Player Color", p->color\
             );

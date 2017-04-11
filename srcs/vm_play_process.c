@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/10 14:56:07 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/11 13:28:02 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void				noop_op_f(t_process *p)
     p->pc += 1;
     if (p->pc > p->player->pc + VM_A_CONFIG.max_player_size)
         p->pc = p->player->pc;
+
 }
 
 void				fill_instruction_wo_ocp(t_process *p)
@@ -30,7 +31,7 @@ void				fill_instruction_wo_ocp(t_process *p)
 		vm_fatal(VM_EMALLOC);
 	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
 	p->instruction->args = p->instruction->code + 1;
-//	p->timer += p->instruction->op->cycle;
+	p->timer += p->instruction->op->cycle;
 }
 
 size_t				get_args_size(t_process *p)
@@ -66,7 +67,7 @@ void				fill_instruction(t_process *p)
 		vm_fatal(VM_EMALLOC);
 	ft_memcpy(p->instruction->code, p->pc, p->instruction->size);
 	p->instruction->args = p->instruction->code + 2;
-//	p->timer += p->instruction->op->cycle;
+	p->timer += p->instruction->op->cycle;
 }
 
 void				live_op_f(t_process *p)
@@ -216,16 +217,18 @@ void				vm_read_instruction(t_process *p)
 
 void			vm_play_instruction(t_process *p)
 {
+	if (p->instruction->op)
+		vm_player_dispatch(p->instruction->op->opcode)(p);
     if (p->last_instruction)
         free(p->last_instruction);
 	p->last_instruction = p->instruction->code;
     p->size_instruction = p->instruction->size;
-    vv_msg("TODO: Actually play instruction in vm_play_process");
-    p->pc += p->instruction->size;
+    /*p->pc += p->instruction->size;
     if (p->pc > p->player->pc + VM_A_CONFIG.max_player_size)
         p->pc = p->player->pc;
-    vv_msg("TODO: Use cbuff to circular handle pc moving. . .");
-    vm_print_memory(p->last_instruction, p->size_instruction, p->player->color, 1);
+    */vv_msg("TODO: Use cbuff to circular handle pc moving. . .");
+	if (PI_ISOPT(proginfo()->opt, VM_VERBOSE_OPT))
+    	vm_print_memory(p->last_instruction, p->size_instruction, p->player->color, 1);
 	free(p->instruction);
 	p->instruction = NULL;
 }

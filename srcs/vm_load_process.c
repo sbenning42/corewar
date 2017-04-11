@@ -23,6 +23,7 @@ void            vm_load_process_i(t_list *l)
     process.registre[0] = p->id;
     process.reg_number = REG_NUMBER;
     process.reg_size = REG_SIZE;
+	vm_read_instruction(&process);
     l = ft_lstnew(&process, sizeof(t_process));
     if (!l)
         vm_fatal(VM_EMALLOC);

@@ -13,7 +13,7 @@ void            vm_load_config(void)
     conf->reg_size = REG_SIZE;
     conf->idx_mod = IDX_MOD;
     conf->cycle_to_die = CYCLE_TO_DIE;
-    conf->nbr_live_check = NBR_LIVE;
+    conf->nbr_live = NBR_LIVE;
     conf->cycle_delta = CYCLE_DELTA;
     conf->max_checks = MAX_CHECKS;
     conf->dump = -1;

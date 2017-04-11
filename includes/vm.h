@@ -19,9 +19,9 @@
 # define VM_EMALLOC             -4
 # define VM_EUSAGE              -5
 
-# define MASK_1 (0xff << 0x18)
-# define MASK_2 (0xff << 0x10)
-# define MASK_3 (0xff << 0x8)
+# define MASK_1 (0xff000000)
+# define MASK_2 (0xff0000)
+# define MASK_3 (0xff00)
 # define MASK_4 (0xff)
 
 # define SHORT_FIRST(X) ((X & MASK_3) >> 0x8)
@@ -49,8 +49,9 @@
 # define VM_MMALLOC             "Can't perform malloc."
 # define VM_MUSAGE              "Usage: TODO (in vm.h, define VM_MUSAGE)"
 
-# define VM_MLIVE               "le joueur %u(%s) est en vie."
-# define VM_MWIN                "le joueur %u(%s) a gagne."
+# define VM_MLIVE               "le joueur %u(%s) est en vie.\n"
+# define VM_MWIN                "le joueur %u(%s) a gagne.\n"
+# define VM_MDEAD               "Un process appartenant au joueur %u(%s) est mort.\n"
 
 # define VM_CONFIG1            "%30s : %lu\n%30s : %u\n%30s : %u\n%30s : %lu\n"
 # define VM_CONFIG2            "%30s : %lu\n%30s : %u\n%30s : %u\n%30s : %u\n"
@@ -63,7 +64,7 @@
 # define VM_MEMORY_DUMP         VM_MEM1 VM_MEM2
 
 # define VM_PLAY1               "\t%30s : %d\n\t%30s : %s\n\t%30s : %ld\n"
-# define VM_PLAY2               "\t%30s : %p\n\t%30s : %s\n"
+# define VM_PLAY2               "\t%30s : %p\n\t%30s : %s\n\t%30s : %s\n"
 # define VM_PLAYER_DUMP         VM_PLAY1 VM_PLAY2
 
 # define VM_PROC1               "\t%30s : %u\n\t%30s : %p\n\t%30s : %p\n\t%30s : %p\n"
@@ -94,6 +95,7 @@ typedef struct s_argd           t_argd;
 typedef struct s_efatal         t_efatal;
 
 typedef void                    (*t_arg_f)(char *);
+typedef void                    (*t_ins_player)(t_process *);
 
 struct                          s_instruction
 {
@@ -119,6 +121,8 @@ struct                          s_process
     unsigned char               *last_instruction;
     unsigned int                size_instruction;
     unsigned long               tic;
+    int							live;
+    int							dead;
 };
 
 struct                          s_cbuff
@@ -137,6 +141,7 @@ struct                          s_player
     header_t                    header;
     t_file                      *obj_file;
     long int                    live;
+    int                    		dead;
     void                        *pc;
     char                        *color;
 };
@@ -152,9 +157,11 @@ struct                          s_vm_config
     unsigned int                reg_number;
     unsigned int                reg_size;
     unsigned long               idx_mod;
+    unsigned int                cycle;
     unsigned int                cycle_to_die;
     unsigned int                cycle_delta;
     unsigned int                max_checks;
+	unsigned int				nbr_checks;
     unsigned long               nbr_live;
     unsigned long               nbr_live_check;
     int                         id_last_live;
@@ -272,6 +279,19 @@ void                            vm_load_process_i(t_list *l);
 */
 
 void							vm_play_process(t_list *l);
+void							vm_read_instruction(t_process *p);
+
+/*
+**                              *** vm_player.c ***
+*/
+
+t_ins_player					vm_player_dispatch(unsigned int opcode);
+
+/*
+**                              *** vm_get.c ***
+*/
+
+char							*vm_get_player_name(int id);
 
 /*
 **                              *** vm_fatal.c ***
@@ -290,5 +310,20 @@ void                            vm_del_process(void *content, size_t size);
 void                            ft_print_memory(void *m, size_t size);
 void                            ft_print_legit_memory(void *m, size_t size);
 void                            vm_print_memory(void *m, size_t s, char *c, int rel);
+
+/*
+**                              *** vm_declare_winner.c ***
+*/
+
+void							vm_declare_winner(void);
+void							vm_declare_live(void);
+void							vm_declare_dead(t_process *p);
+
+/*
+**                              *** vm_finish.c ***
+*/
+
+int								vm_finish_dump(void);
+int								vm_finish_live(void);
 
 #endif

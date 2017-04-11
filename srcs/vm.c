@@ -24,19 +24,25 @@ void                vm_setup(void)
 int                 vm_finish(void)
 {
     vv_msg("TODO: Implement death of players");
-    if (VM_A_CONFIG.dump > 0)
-    {
-        if (VM_SINGLE->tic >= (unsigned long)VM_A_CONFIG.dump)
-        {
-			vm_put_players();
-//			if (PI_ISOPT(proginfo()->opt, VM_VERBOSE_OPT))
-            	ft_print_legit_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
-//			else
-//            	ft_print_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
-            return (1);
-        }
-    }
+	if (vm_finish_dump())
+		return (1);
+	else if (vm_finish_live())
+		return (1);
+	else if (!VM_A_PROCESS)
+	{
+		vm_put_players();
+        ft_print_legit_memory(VM_A_MEMORY.buffer, VM_A_CONFIG.mem_size);
+		vm_declare_winner();
+		return (1);
+	}
     return (0);
+}
+
+int					vm_if_dead(void *ref, void *c, size_t s)
+{
+	return (((t_process *)c)->dead);
+	(void)ref;
+	(void)s;
 }
 
 void                vm_loop(void)
@@ -44,6 +50,7 @@ void                vm_loop(void)
     vv_enter("vm_loop");
     while (42)
     {
+		ft_lstdel_if(&VM_A_PROCESS, NULL, vm_if_dead, vm_del_process);
 		ft_lstiter(VM_A_PROCESS, vm_play_process);
         VM_SINGLE->tic += 1;
         if (vm_finish())

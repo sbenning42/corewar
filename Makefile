@@ -49,9 +49,13 @@ SRC =			main.c\
                 vm_load_player.c\
                 vm_load_process.c\
                 vm_play_process.c\
+                vm_player.c\
+                vm_get.c\
                 vm_fatal.c\
                 vm_del.c\
                 vm_print_memory.c\
+                vm_declare_winner.c\
+                vm_finish.c\
                 vm_vverbose.c
 
 SRC_DIR =		srcs/

@@ -20,8 +20,8 @@ static void     vm_dump_config(int fd)
             "Cycle To Die", config.cycle_to_die,\
             "Cycle Delta", config.cycle_delta,\
             "Max Checks", config.max_checks,\
-            "Number of Live", config.nbr_live_check,\
-            "Live since Last Checks", config.nbr_live,\
+            "Number of Live", config.nbr_live,\
+            "Live since Last Checks", config.nbr_live_check,\
             "Last Player Alive", config.id_last_live, config.name_last_live,\
             "Dump", config.dump,\
             VV_SEPLINE\
