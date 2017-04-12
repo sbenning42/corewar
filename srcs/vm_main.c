@@ -1,38 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   vm_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/27 10:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:24:03 by sbenning         ###   ########.fr       */
+/*   Created: 2017/04/12 11:25:50 by sbenning          #+#    #+#             */
+/*   Updated: 2017/04/12 11:30:26 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void				vm_loop(t_vm *vm)
+static t_main		*s_main(void)
 {
-	while (42)
-	{
-		break ;
-	}
-	(void)vm;
+	static t_main	m;
+
+	return (&m);
 }
 
-void				vm_cleanup(t_vm *vm)
+void				set_main(int ac, char **av)
 {
-	(void)vm;
+	s_main()->ac = ac;
+	s_main()->av = av;
 }
 
-int					main(int ac, char **av)
+int					main_ac(void)
 {
-	t_vm			vm;
+	return (s_main()->ac);
+}
 
-	set_main(ac, av);
-    vm_setup(&vm);
-    vm_loop(&vm);
-    vm_cleanup(&vm);
-	return (0);
+char				**main_av(void)
+{
+	return (s_main()->av);
+}
+
+char				*prog_name(void)
+{
+	return (s_main()->av[0]);
 }

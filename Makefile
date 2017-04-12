@@ -16,9 +16,7 @@ SRC =			main.c\
                 ft_file.c\
                 ft_print_memory.c\
                 ft_gen_lex.c\
-                ft_getopt.c\
                 ft_lexer.c\
-                ft_smart_getopt.c\
                 get_next_line.c\
                 nfa_add.c\
                 nfa_atom_preset.c\
@@ -32,31 +30,18 @@ SRC =			main.c\
                 nfa_set.c\
                 nfa_trans.c\
                 op.c\
-                proginfo.c\
                 regex_explicit.c\
                 explicit_rpn.c\
                 rpn_nfa.c\
                 lexer_del.c\
-                vm.c\
-                vm_dump.c\
-                vm_dump_player.c\
-                vm_load.c\
-                vm_load_binary.c\
-                vm_load_arguments.c\
-                vm_load_arguments_f.c\
-                vm_create_player.c\
-                vm_cbuff.c\
-                vm_load_player.c\
-                vm_load_process.c\
-                vm_play_process.c\
-                vm_player.c\
-                vm_get.c\
-                vm_fatal.c\
-                vm_del.c\
-                vm_print_memory.c\
-                vm_declare_winner.c\
-                vm_finish.c\
-                vm_vverbose.c
+				vm_error.c\
+				vm_main.c\
+				vm_args.c\
+				vm_setup.c\
+				vm_load_args.c\
+				vm_handler_args.c\
+				vm_new_player.c\
+				vm_load_process.c
 
 SRC_DIR =		srcs/
 OBJ_DIR =		obj/

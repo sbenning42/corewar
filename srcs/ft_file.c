@@ -31,8 +31,6 @@ void        close_file(t_file **f)
     free((*f)->name);
     if ((*f)->line)
         free((*f)->line);
-    if ((*f)->binary)
-        free((*f)->binary);
     free(*f);
     *f = NULL;
 }
@@ -48,7 +46,7 @@ int         read_file(t_file *f)
         f->li += 1;
     return (status);
 }
-
+/*
 int                 read_binary_file(t_file *f)
 {
     size_t          size;
@@ -81,6 +79,28 @@ int                 read_binary_file(t_file *f)
     }
     f->binary_size = size;
     return (0);
+}
+*/
+size_t				read_binary_file(t_file *f, unsigned char *buff, size_t size)
+{
+	unsigned char	ibuff[2048];
+	size_t			isize;
+	size_t			tret;
+	int				ret;
+
+	isize = (size < 2048 ? size : 2048);
+	tret = 0;
+    while (tret < size)
+    {
+		ret = read(f->fd, ibuff, isize);
+		if (ret < 0)
+			return ((size_t)-1);
+		else if (!ret)
+			break ;
+        ft_memcpy(buff + tret, ibuff, ret);
+		tret += ret;
+    }
+    return (tret);
 }
 
 int         ft_realloc(void **m, int dsize, int size)

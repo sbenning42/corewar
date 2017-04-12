@@ -1,38 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   vm_args.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/27 10:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:24:03 by sbenning         ###   ########.fr       */
+/*   Created: 2017/04/12 11:31:10 by sbenning          #+#    #+#             */
+/*   Updated: 2017/04/12 12:13:26 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void				vm_loop(t_vm *vm)
+void			set_args(char **k, char **re, size_t size)
 {
-	while (42)
+	t_lexer		*lexer;
+
+	if (!(lexer = ft_gen_lex(re, k, size)))
+		vm_fatal(VM_EMALLOC);
+	ft_set_lex(lexer);
+	ft_lex_start_scan(main_av()[1]);
+}
+
+t_lexem			*get_arg(void)
+{
+	static int	i = 1;
+	t_lexem		*l;
+
+	if (!(l = ft_lex()) && ++i < main_ac())
 	{
-		break ;
+		ft_lex_start_scan(main_av()[i]);
+		l = ft_lex();
 	}
-	(void)vm;
+	return (l);
 }
 
-void				vm_cleanup(t_vm *vm)
+void			del_args(void)
 {
-	(void)vm;
-}
-
-int					main(int ac, char **av)
-{
-	t_vm			vm;
-
-	set_main(ac, av);
-    vm_setup(&vm);
-    vm_loop(&vm);
-    vm_cleanup(&vm);
-	return (0);
+	ft_kill_lex();
 }

@@ -1,57 +1,29 @@
-#include "libft.h"
+#include <stdio.h>
 
-int fi(void *ref, void *c, size_t s)
-{
-    if (*(char *)ref == *(char *)c)
-        return (1);
-    return (0);
-    (void)s;
-}
-
-void    del(void *c, size_t s)
-{
-    free(c);
-    (void)s;
-}
-
-void    plst(t_list *l)
-{
-    ft_printf("[%c]", *(char *)l->content);
-}
+# define COL(X, Y, Z, S)	"\033[38;2;"#X";"#Y";"#Z"m"S"\033[0m"
+# define RED(S)				"\033[38;2;255;0;0m"S"\033[0m"
+# define GREEN(S)			"\033[38;2;0;255;0m"S"\033[0m"
+# define BLUE(S)			"\033[38;2;0;0;255m"S"\033[0m"
+# define YELLOW(S)			"\033[38;2;255;255;0m"S"\033[0m"
+# define PINK(S)			"\033[38;2;255;0;255m"S"\033[0m"
+# define CYAN(S)			"\033[38;2;0;255;255m"S"\033[0m"
+# define ORANGE(S)			"\033[38;2;237;127;16m"S"\033[0m"
+# define BRUN(S)			"\033[38;2;91;60;17m"S"\033[0m"
+# define SOMBRE(S)			"\033[38;2;63;34;4m"S"\033[0m"
+# define CLAIR(S)			"\033[38;2;245;245;220m"S"\033[0m"
 
 int main()
 {
-    t_list  *h;
-    t_list  *l;
-
-    h = NULL;
-
-    l = ft_lstnew("a", 1);
-    ft_lstadd_back(&h, l);
-
-    l = ft_lstnew("b", 1);
-    ft_lstadd_back(&h, l);
-
-    l = ft_lstnew("c", 1);
-    ft_lstadd_back(&h, l);
-
-    l = ft_lstnew("a", 1);
-    ft_lstadd_back(&h, l);
-
-    l = ft_lstnew("b", 1);
-    ft_lstadd_back(&h, l);
-
-    ft_lstiter(h, plst);
-    ft_printf("\n");
-    ft_lstdel_if(&h, "b", fi, del);
-    ft_lstiter(h, plst);
-    ft_printf("\n");
-    ft_lstdel_if(&h, "a", fi, del);
-    ft_lstiter(h, plst);
-    ft_printf("\n");
-    ft_lstdel(&h, del);
-    ft_lstiter(h, plst);
-    ft_printf("\n");
+	printf("%s\n", RED("red"));
+	printf("%s\n", GREEN("green"));
+	printf("%s\n", BLUE("blue"));
+	printf("%s\n", YELLOW("yellow"));
+	printf("%s\n", PINK("pink"));
+	printf("%s\n", CYAN("cyan"));
+	printf("%s\n", ORANGE("orange"));
+	printf("%s\n", BRUN("brun"));
+	printf("%s\n", SOMBRE("sombre"));
+	printf("%s\n", CLAIR("clair"));
 
     return (0);
 }

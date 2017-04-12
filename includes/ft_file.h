@@ -14,14 +14,12 @@ struct                  s_file
     int                 fd;
     char                *line;
     int                 li;
-    unsigned char       *binary;
-    size_t              binary_size;
 };
 
 t_file                  *open_file(char *name, int mode);
 void                    close_file(t_file **f);
 int                     read_file(t_file *f);
-int                     read_binary_file(t_file *f);
+size_t					read_binary_file(t_file *f, unsigned char *buff, size_t size);
 int                     ft_realloc(void **m, int dsize, int size);
 
 #endif
