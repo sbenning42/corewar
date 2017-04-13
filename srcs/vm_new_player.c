@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 15:23:00 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 10:52:22 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 19:55:21 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char		*get_color(void)
 	return (color[(++i % TABSIZE(color))]);
 }
 
-static int		is_available_id(t_vm *vm, int id)
+int				is_available_id(t_vm *vm, int id)
 {
 	t_list		*l;
 
@@ -87,6 +87,8 @@ void			vm_new_player(t_vm *vm, char *name, int id)
 	t_list		*l;
 
 	ft_bzero(&player, sizeof(player));
+	if (vm->config.nb_player >= vm->gconfig.max_player)
+		return ;
 	if (!(player.file = open_file(name, O_RDONLY)))
 	{
 		vm_error_notaccess(name);

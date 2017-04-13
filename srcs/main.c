@@ -6,36 +6,28 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 10:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:46:17 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 23:41:41 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void				vm_put_cycle(t_vm *vm)
-{
-	if (vm->config.cycle && ISBIT(vm->config.verb, VM_CYCLE_VERB))
-		ft_printf("It is now cycle %u\n", vm->config.cycle);
-}
-
-void				vm_run_cycle(t_vm *vm)
-{
-	vm->config.cycle += 1;
-	vm_put_cycle(vm);
-	vm_play_process(vm);
-}
-
 int					vm_finish(t_vm *vm)
 {
-	if (!vm->gconfig.cycle_to_die)
+	if (vm_check_dump(vm))
 		return (1);
-	if (vm->config.cycle % vm->gconfig.cycle_to_die)
+	vm_check_step(vm);
+	if (vm_check_cycle(vm))
 		return (0);
 	vm_check_process(vm);
 	vm_check_live(vm);
 	vm_check_checks(vm);
-	ft_lstdel_if(&vm->process, NULL, vm_is_process_dead, vm_del_process);
-	return ((vm->process ? 0 : 1));
+	if (!vm->process)
+	{
+		vm_declare_win(vm);
+		return (1);
+	}
+	return (0);
 }
 
 void				vm_loop(t_vm *vm)
@@ -44,7 +36,10 @@ void				vm_loop(t_vm *vm)
 		return ;
 	while (42)
 	{
-		vm_run_cycle(vm);
+		vm->config.cycle += 1;
+		if (ISBIT(vm->config.verb, VM_CYCLE_VERB))
+			vm_declare_cycle(vm);
+		vm_play_process(vm);
 		if (vm_finish(vm))
 			break ;
 	}
@@ -52,7 +47,6 @@ void				vm_loop(t_vm *vm)
 
 void				vm_cleanup(t_vm *vm)
 {
-	vm_put_memory(vm);
 	ft_lstdel(&vm->player, vm_del_player);
 	ft_lstdel(&vm->process, vm_del_process);
 }

@@ -6,12 +6,12 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:11:35 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:48:16 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 20:46:52 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-//TODO: Magic number here
+
 void		vm_check_process_i(t_vm *vm, t_process *p)
 {
 	if (p->live >= vm->gconfig.cycle_to_die)
@@ -20,7 +20,7 @@ void		vm_check_process_i(t_vm *vm, t_process *p)
 		if (ISBIT(vm->config.verb, VM_DEATH_VERB))
 			ft_printf("Process %d hasn't lived for %u cycle (CDT %u)\n",\
 					p->player_id,\
-					p->live + 1,\
+					p->live,\
 					vm->gconfig.cycle_to_die);
 	}
 }
@@ -35,6 +35,7 @@ void		vm_check_process(t_vm *vm)
 		vm_check_process_i(vm, (t_process *)l->content);
 		l = l->next;
 	}
+	ft_lstdel_if(&vm->process, NULL, vm_is_process_dead, vm_del_process);
 }
 
 void		vm_check_live(t_vm *vm)

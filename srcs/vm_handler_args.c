@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 15:07:23 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 15:37:49 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 18:58:01 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void		vm_handler_arg_pnum(t_vm *vm, char *arg)
 	lexem_del(&l);
 	if (!((l = get_arg()) && (l->id == VM_CHAMP_ARG || l->id == VM_NUMBER_ARG)))
 		vm_fatal(VM_EUSAGE);
-	vm_new_player(vm, arg, n);
+	vm_new_player(vm, l->value, n);
 	lexem_del(&l);
+	(void)arg;
 }
 
 void		vm_handler_arg_verbose(t_vm *vm, char *arg)

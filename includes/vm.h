@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:58:27 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 19:46:24 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 /*
 **								define
 */
+
+# define LINUX
 
 # define VM_ERR_ARG             -1
 # define VM_AFF_ARG            	0
@@ -62,22 +64,25 @@
 # define VM_C3U					VM_15U VM_16U VM_17U VM_18U VM_19U VM_20U
 # define VM_MUSAGE				VM_C1U VM_C2U VM_C3U
 
-# define MASK_1 (0xff000000)
-# define MASK_2 (0xff0000)
-# define MASK_3 (0xff00)
-# define MASK_4 (0xff)
+# define MASK_1					(0xff000000)
+# define MASK_2					(0xff0000)
+# define MASK_3					(0xff00)
+# define MASK_4					(0xff)
 
-# define SHORT_FIRST(X) ((X & MASK_3) >> 0x8)
-# define SHORT_SECOND(X) ((X & MASK_4) << 0x8)
-# define SHORT_LITTLE2BIG(X) (SHORT_FIRST(X) + SHORT_SECOND(X))
+# define SHORT_FIRST(X)			((X & MASK_3) >> 0x8)
+# define SHORT_SECOND(X)		((X & MASK_4) << 0x8)
 
-# define INT_FIRST(X) ((X & MASK_1) >> 0x18)
-# define INT_SECOND(X) ((X & MASK_2) >> 0x8)
-# define INT_THIRD(X) ((X & MASK_3) << 0x8)
-# define INT_FOURTH(X) ((X & MASK_4) << 0x18)
-# define INT_COUPLE_FIRST(X) (INT_FIRST(X) + INT_SECOND(X))
-# define INT_COUPLE_SECOND(X) (INT_THIRD(X) + INT_FOURTH(X))
-# define INT_LITTLE2BIG(X) (INT_COUPLE_FIRST(X) + INT_COUPLE_SECOND(X))
+# define SHORT_LITTLE2BIG(X)	(SHORT_FIRST(X) + SHORT_SECOND(X))
+
+# define INT_FIRST(X)			((X & MASK_1) >> 0x18)
+# define INT_SECOND(X)			((X & MASK_2) >> 0x8)
+# define INT_THIRD(X)			((X & MASK_3) << 0x8)
+# define INT_FOURTH(X)			((X & MASK_4) << 0x18)
+
+# define INT_COUPLE_FIRST(X)	(INT_FIRST(X) + INT_SECOND(X))
+# define INT_COUPLE_SECOND(X)	(INT_THIRD(X) + INT_FOURTH(X))
+
+# define INT_LITTLE2BIG(X)		(INT_COUPLE_FIRST(X) + INT_COUPLE_SECOND(X))
 
 /*
 ********************************************************************************
@@ -150,6 +155,7 @@ struct                          s_vm
     t_vm_gconf					gconfig;
     t_vm_conf					config;
     unsigned char				memory[MEM_SIZE];
+    char						*color[MEM_SIZE];
     t_list						*player;
     t_list						*process;
 };
@@ -285,6 +291,7 @@ void							vm_handler_arg_champion(t_vm *vm, char *arg);
 */
 
 void							vm_new_player(t_vm *vm, char *name, int id);
+int								is_available_id(t_vm *vm, int id);
 
 /*
 ********************************************************************************
@@ -296,6 +303,7 @@ void							vm_new_player(t_vm *vm, char *name, int id);
 
 void							vm_load_process(t_vm *vm);
 void							vm_put_memory(t_vm *vm);
+void							vm_put_players(t_vm *vm);
 
 /*
 ********************************************************************************
@@ -376,6 +384,18 @@ void							vm_check_checks(t_vm *vm);
 */
 
 /*
+**								vm_check_rules.c
+*/
+
+int								vm_check_dump(t_vm *vm);
+void							vm_check_step(t_vm *vm);
+int								vm_check_cycle(t_vm *vm);
+
+/*
+********************************************************************************
+*/
+
+/*
 **								vm_del.c
 */
 
@@ -422,7 +442,9 @@ void							vm_set_timer(t_process *p);
 **								vm_declare.c
 */
 
-void							vm_declare_live(t_vm *vm, int id);
+void							vm_declare_cycle(t_vm *vm);
+void							vm_declare_live(t_vm *vm);
+void							vm_declare_win(t_vm *vm);
 
 /*
 ********************************************************************************

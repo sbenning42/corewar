@@ -6,7 +6,7 @@
 #*   By: sbenning <sbenning@student.42.fr>          +#+  +:+       +#+        *#
 #*                                                +#+#+#+#+#+   +#+           *#
 #*   Created: 2015/12/18 23:33:22 by sbenning          #+#    #+#             *#
-#*   Updated: 2017/03/09 15:07:24 by sbenning         ###   ########.fr       *#
+#*   Updated: 2017/04/13 19:35:09 by                  ###   ########.fr       *#
 #*                                                                            *#
 #* ************************************************************************** *#
 
@@ -51,6 +51,7 @@ SRC =			main.c\
                 vm_get.c\
                 vm_set.c\
                 vm_check.c\
+                vm_check_rules.c\
                 vm_declare.c\
                 vm_del.c
 

@@ -103,7 +103,7 @@ t_lexem            *ft_lex(void)
             max = size;
             max_analyze = analyze;
         }
-        l = l->next;        
+        l = l->next;
     }
     if (!max && **s_scan())
         return (lexem_new(-1, "{red}LEXERROR{eoc}", *s_scan(), (int)ft_strlen(*s_scan())));
@@ -112,6 +112,7 @@ t_lexem            *ft_lex(void)
     lexem = lexem_new(max_analyze->id, max_analyze->key, *s_scan(), max);
     if (!lexem)
         return (NULL);
+	lexem_dump(lexem);
     *s_scan() += max;
     *s_offset() += max;
     return (lexem);

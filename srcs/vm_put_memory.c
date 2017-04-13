@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 08:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 11:04:28 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 19:49:24 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,14 @@ void				vm_put_byte(t_vm *vm, size_t i)
 	unsigned char	o;
 
 	o = vm->memory[i];
+	if (vm->color[i])
+		ft_printf("%s", vm->color[i]);
 	if (!o)
 		ft_printf("%02x ", o);
 	else
 		ft_printf("{gr}%02x{eoc} ", o);
+	if (vm->color[i])
+		ft_printf("{eoc}");
 }
 
 void				vm_put_64(t_vm *vm, size_t start)

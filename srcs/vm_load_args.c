@@ -6,12 +6,11 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 14:54:26 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 10:55:42 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 20:27:57 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
-
 
 static void			vm_handler_arg_error(t_vm *vm, char *arg)
 {

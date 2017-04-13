@@ -34,6 +34,9 @@ void				vm_load_process(t_vm *vm)
 		player = (t_player *)l->content;
 		player->pc = start;
 		ft_memcpy(start, player->binary, player->binary_size);
+		int i = -1;
+		while (++i < (int)player->binary_size)
+			vm->color[(start - vm->memory) + i] = player->color;
 		vm_new_process(vm, start, player->id, player->color);
 		start += offset;
 		l = l->next;

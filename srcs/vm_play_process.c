@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:36:33 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 18:42:52 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,8 @@ static void				(*dispatch(unsigned char op))(t_vm *, t_process *)
 
 static void				vm_play_process_i(t_vm *vm, t_process *process)
 {
-	if (*process->pc == 0x1)
-		process->live = 0;
-	else
-		process->live += 1;
-	if (process->timer)
+	process->live += 1;
+	if (process->timer > 1)
 	{
 		process->timer -= 1;
 		return ;

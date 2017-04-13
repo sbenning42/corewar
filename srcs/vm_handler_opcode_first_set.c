@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:36:06 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:59:31 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 19:05:12 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,20 @@ void	vm_handler_opcode_live(t_vm *vm, t_process *p)
 {
 	int	arg;
 
+	p->live = 0;
+	p->pc += 1;
 	arg = vm_get_direct_int_arg(p->pc);
-	p->pc += 5;
+#ifdef LINUX
+	arg = INT_LITTLE2BIG(arg);
+#endif
+	p->pc += 4;
 	vm->config.nb_live += 1;
-	vm->config.last_live_id = arg;
-	if (ISBIT(vm->config.verb, VM_LIVE_VERB))
-		vm_declare_live(vm, arg);
+	if (!is_available_id(vm, arg))
+	{
+		vm->config.last_live_id = arg;
+		if (ISBIT(vm->config.verb, VM_LIVE_VERB))
+			vm_declare_live(vm);
+	}
 	vm_set_timer(p);
 }
 
