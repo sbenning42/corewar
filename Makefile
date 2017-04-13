@@ -14,7 +14,6 @@ NAME =			vm
 
 SRC =			main.c\
                 ft_file.c\
-                ft_print_memory.c\
                 ft_gen_lex.c\
                 ft_lexer.c\
                 get_next_line.c\
@@ -41,7 +40,19 @@ SRC =			main.c\
 				vm_load_args.c\
 				vm_handler_args.c\
 				vm_new_player.c\
-				vm_load_process.c
+                vm_put_memory.c\
+				vm_load_process.c\
+				vm_play_process.c\
+				vm_handler_opcode_first_set.c\
+				vm_handler_opcode_second_set.c\
+				vm_handler_opcode_third_set.c\
+				vm_handler_opcode_fourth_set.c\
+                vm_is.c\
+                vm_get.c\
+                vm_set.c\
+                vm_check.c\
+                vm_declare.c\
+                vm_del.c
 
 SRC_DIR =		srcs/
 OBJ_DIR =		obj/

@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:14:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:24:03 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 15:24:57 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char		*g_key[] = {\
     "Step Run",\
     "Player Number",\
     "Verbosity",\
-    "Numbers"\
+    "Numbers",\
     "Champions"\
 };
 
@@ -28,7 +28,7 @@ static char		*g_regex[] = {\
     "\\-+[step|s]",\
     "\\-+[number|n]",\
     "\\-+[verbose|v]",\
-    "[0-9]+"\
+    "[0-9]+",\
     ".*"\
 };
 
@@ -49,10 +49,10 @@ static void		vm_load_gconfig(t_vm *vm)
 void			vm_setup(t_vm *vm)
 {
 	ft_bzero(vm, sizeof(*vm));
-	vm_load_gconfig(vm);
 	vm->config.dump = -1;
 	vm->config.step = -1;
-	vm->config.verb = -1;
+	vm->config.last_live_id = -1;
+	vm_load_gconfig(vm);
     set_args(g_key, g_regex, TABSIZE(g_regex));
 	vm_load_args(vm);
 	vm_load_process(vm);

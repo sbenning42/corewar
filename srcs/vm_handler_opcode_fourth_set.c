@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm_is.c                                            :+:      :+:    :+:   */
+/*   vm_handler_opcode_fourth_set.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 14:17:32 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 14:36:49 by sbenning         ###   ########.fr       */
+/*   Created: 2017/04/13 14:58:54 by sbenning          #+#    #+#             */
+/*   Updated: 2017/04/13 14:59:41 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int				vm_is_process_dead(void *ref, void *c, size_t size)
+void	vm_handler_opcode_lld(t_vm *vm, t_process *p)
 {
-	t_process	*p;
+	(void)vm;
+	(void)p;
+}
 
-	p = (t_process *)c;
-	return (p->dead);
-	(void)ref;
-	(void)size;
+void	vm_handler_opcode_lldi(t_vm *vm, t_process *p)
+{
+	(void)vm;
+	(void)p;
+}
+
+void	vm_handler_opcode_lfork(t_vm *vm, t_process *p)
+{
+	(void)vm;
+	(void)p;
 }

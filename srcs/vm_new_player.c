@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 15:23:00 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:28:57 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 10:52:22 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,32 @@ static int		get_id(t_vm *vm, int id)
 	return (id);
 }
 
-static int		vm_read_header(t_player *p)
+static void		vm_load_player_file(t_player *p)
 {
+	size_t		hsize;
 	size_t		size;
 
-	size = read_binary_file(p->file, (unsigned char *)&p->header, sizeof(header_t));
-	if (size < sizeof(header_t))
-	{
-		ft_fprintf(2, "%s: `%s` too small to be a corewar executable\n",\
-				prog_name(), p->file->name);
-		close_file(p->file)
-		return (-1);
-	}
+	hsize = sizeof(header_t);
+	size = hsize;
+	ft_memcpy(&p->header, p->file->binary, size);
 	p->header.magic = INT_LITTLE2BIG(p->header.magic);
 	p->header.prog_size = INT_LITTLE2BIG(p->header.prog_size);
+	size = p->file->binary_size - hsize;
+	ft_memcpy(p->binary, p->file->binary + hsize, size);
+	p->binary_size = size;
+}
+
+static int		vm_check_champ_size(t_vm *vm, t_player *player)
+{
+	size_t		hsize;
+
+	hsize = sizeof(header_t);
+	if ((player->file->binary_size < hsize)\
+			|| (player->file->binary_size > hsize + vm->gconfig.champ_max_size))
+	{
+		vm_error_notcorewar(player->file->name);
+		return (1);
+	}
 	return (0);
 }
 
@@ -73,29 +85,26 @@ void			vm_new_player(t_vm *vm, char *name, int id)
 {
 	t_player	player;
 	t_list		*l;
-	size_t		size;
 
 	ft_bzero(&player, sizeof(player));
-	player.id = get_id(vm, id);
 	if (!(player.file = open_file(name, O_RDONLY)))
 	{
-		ft_fprintf(2, "%s: `%s` File not accessible\n", prog_name(), name);
+		vm_error_notaccess(name);
 		return ;
 	}
-	if (vm_read_header(&player))
-		return ;
-	size = read_binary_file(player.f, player.binary, player.header.prog_size);
-	if (size > vm->gconfig.champ_max_size)
+	if (read_binary_file(player.file))
+		vm_fatal(VM_EMALLOC);
+	if (vm_check_champ_size(vm, &player))
 	{
-		ft_fprintf(2, "%s: `%s` too big to be a corewar executable\n",\
-				prog_name(), name);
-		close_file(&player.file)
+		close_file(&player.file);
 		return ;
 	}
+	vm_load_player_file(&player);
+	close_file(&player.file);
+	player.id = get_id(vm, id);
 	player.color = get_color();
 	if (!(l = ft_lstnew(&player, sizeof(player))))
 		vm_fatal(VM_EMALLOC);
 	ft_lstadd_back(&vm->player, l);
-	close_file(&player.file)
 	vm->config.nb_player += 1;
 }

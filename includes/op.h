@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 10:24:20 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:22:53 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 15:35:16 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,5 +139,7 @@ struct						header_s
 	unsigned int			prog_size;
 	char					comment[COMMENT_LENGTH + 1];
 };
+
+extern t_op					g_op[];
 
 #endif

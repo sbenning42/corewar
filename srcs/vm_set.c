@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm_is.c                                            :+:      :+:    :+:   */
+/*   vm_set.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/12 14:17:32 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 14:36:49 by sbenning         ###   ########.fr       */
+/*   Created: 2017/04/13 15:32:18 by sbenning          #+#    #+#             */
+/*   Updated: 2017/04/13 15:41:08 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-int				vm_is_process_dead(void *ref, void *c, size_t size)
+void		vm_set_timer(t_process *p)
 {
-	t_process	*p;
+	int		i;
 
-	p = (t_process *)c;
-	return (p->dead);
-	(void)ref;
-	(void)size;
+	i = -1;
+	while (g_op[++i].opcode)
+	{
+		if (*p->pc == g_op[i].opcode)
+		{
+			p->timer = g_op[i].cycle;
+			return ;
+		}
+	}
+	p->timer = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 14:54:26 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:24:49 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 10:55:42 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 static void			vm_handler_arg_error(t_vm *vm, char *arg)
 {
-	ft_fprintf(2, "%s: Illegal argument `%s`\n", prog_name(), arg);
 	vm_fatal(VM_EUSAGE);
 	(void)vm;
+	(void)arg;
 }
 
 static t_vm_args_h	g_args_handler[] = {\
@@ -31,7 +31,7 @@ static t_vm_args_h	g_args_handler[] = {\
 	{VM_CHAMP_ARG, vm_handler_arg_champion}\
 };
 
-void				(*dispatch(int id))(t_vm *, char *)
+static void			(*dispatch(int id))(t_vm *, char *)
 {
 	size_t			i;
 

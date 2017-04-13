@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:23:19 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 15:58:27 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@
 
 # define VM_EUSAGE              -1
 # define VM_EMALLOC             -2
+
+# define VM_LIVE_VERB			0x1
+# define VM_CYCLE_VERB			0x2
+# define VM_OP_VERB				0x4
+# define VM_DEATH_VERB			0x8
+# define VM_PC_VERB				0x10
+
+# define ISBIT(X, Y)			(X & Y)
 
 # define VM_1U					"Usage: ./corewar [-d N -s N -v N | -b] "
 # define VM_2U					"[-a] [-n N] <champion1.cor> [[-n N] <...>]\n"
@@ -98,7 +106,9 @@ typedef struct s_vm_gconf		t_vm_gconf;
 typedef struct s_vm_conf		t_vm_conf;
 typedef struct s_vm				t_vm;
 typedef struct s_vm_args_h		t_vm_args_h;
+typedef struct s_vm_opcode_h	t_vm_opcode_h;
 typedef struct s_player			t_player;
+typedef struct s_process		t_process;
 
 /*
 ********************************************************************************
@@ -132,6 +142,7 @@ struct							s_vm_conf
     int							dump;
     int							step;
     int							verb;
+	int							last_live_id;
 };
 
 struct                          s_vm
@@ -161,23 +172,31 @@ struct							s_vm_args_h
 	void						(*func)(t_vm *, char *);
 };
 
+struct							s_vm_opcode_h
+{
+	unsigned char				opcode;
+	void						(*func)(t_vm *, t_process *);
+};
+
 struct                          s_player
 {
     int							id;
     header_t					header;
     t_file                      *file;
 	unsigned char				binary[CHAMP_MAX_SIZE];
+	size_t						binary_size;
     unsigned char				*pc;
     char						*color;
 };
 
 struct                          s_process
 {
+	int							player_id;
     unsigned char				*pc;
     int                         registre[REG_NUMBER];
     unsigned int                carry;
-    unsigned long               timer;
-    int							live;
+    unsigned int				timer;
+    unsigned int				live;
     int							dead;
 	char						*color;
 };
@@ -194,6 +213,8 @@ struct                          s_process
 char							*vm_strerror(int error);
 int								vm_error(int error);
 void							vm_fatal(int error);
+void							vm_error_notaccess(char *file);
+void							vm_error_notcorewar(char *file);
 
 /*
 ********************************************************************************
@@ -263,7 +284,7 @@ void							vm_handler_arg_champion(t_vm *vm, char *arg);
 **								vm_new_player.c
 */
 
-t_list							*vm_new_player(t_vm *vm, char *name, int id);
+void							vm_new_player(t_vm *vm, char *name, int id);
 
 /*
 ********************************************************************************
@@ -274,10 +295,139 @@ t_list							*vm_new_player(t_vm *vm, char *name, int id);
 */
 
 void							vm_load_process(t_vm *vm);
+void							vm_put_memory(t_vm *vm);
 
 /*
 ********************************************************************************
 */
+
+/*
+**								vm_play_process.c
+*/
+
+void							vm_play_process(t_vm *vm);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_handler_opcode_first_set.c
+*/
+
+void							vm_handler_opcode_live(t_vm *vm, t_process *p);
+void							vm_handler_opcode_add(t_vm *vm, t_process *p);
+void							vm_handler_opcode_sub(t_vm *vm, t_process *p);
+void							vm_handler_opcode_aff(t_vm *vm, t_process *p);
+void							vm_handler_opcode_zjmp(t_vm *vm, t_process *p);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_handler_opcode_second_set.c
+*/
+
+void							vm_handler_opcode_and(t_vm *vm, t_process *p);
+void							vm_handler_opcode_or(t_vm *vm, t_process *p);
+void							vm_handler_opcode_xor(t_vm *vm, t_process *p);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_handler_opcode_third_set.c
+*/
+
+void							vm_handler_opcode_ld(t_vm *vm, t_process *p);
+void							vm_handler_opcode_st(t_vm *vm, t_process *p);
+void							vm_handler_opcode_ldi(t_vm *vm, t_process *p);
+void							vm_handler_opcode_sti(t_vm *vm, t_process *p);
+void							vm_handler_opcode_fork(t_vm *vm, t_process *p);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_handler_opcode_fourth_set.c
+*/
+
+void							vm_handler_opcode_lld(t_vm *vm, t_process *p);
+void							vm_handler_opcode_lldi(t_vm *vm, t_process *p);
+void							vm_handler_opcode_lfork(t_vm *vm, t_process *p);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_check.c
+*/
+
+void							vm_check_process(t_vm *vm);
+void							vm_check_live(t_vm *vm);
+void							vm_check_checks(t_vm *vm);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_del.c
+*/
+
+void							vm_del_player(void *content, size_t size);
+void							vm_del_process(void *content, size_t size);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_is.c
+*/
+
+int								vm_is_process_dead\
+									(void *ref, void *c, size_t size);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_get.c
+*/
+
+int								vm_get_direct_int_arg(unsigned char *pc);
+char							*vm_get_player_name(t_vm *vm, int id);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_set.c
+*/
+
+void							vm_set_timer(t_process *p);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_declare.c
+*/
+
+void							vm_declare_live(t_vm *vm, int id);
+
+/*
+********************************************************************************
+*/
+
 /*############################################################################*/
 /*############################################################################*/
 /*############################################################################*/

@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:53:50 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/12 16:15:22 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/13 08:38:39 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,16 @@ int					vm_error(int error)
 {
 	ft_fprintf(2, "%s: %s\n", prog_name(), vm_strerror(error));
 	return (error);
+}
+
+void				vm_error_notaccess(char *file)
+{
+	ft_fprintf(2, "%s: %s: not accessible\n", prog_name(), file);
+}
+
+void				vm_error_notcorewar(char *file)
+{
+	ft_fprintf(2, "%s: %s: not a corewar executable\n", prog_name(), file);
 }
 
 void				vm_fatal(int error)
