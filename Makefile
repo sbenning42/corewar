@@ -53,6 +53,7 @@ SRC =			main.c\
                 vm_check.c\
                 vm_check_rules.c\
                 vm_declare.c\
+				vm_put_instruction.c\
                 vm_del.c
 
 SRC_DIR =		srcs/
@@ -106,11 +107,11 @@ lfclean :
 lre : 
 	make re -C $(LIBFT_DIR)
 
-clean :
+clean : lclean
 	rm -f $(ABS_OBJ)
 
-fclean : clean
+fclean : clean lfclean
 	rm -f $(NAME)
 
-re : fclean all
+re : fclean lre all
 

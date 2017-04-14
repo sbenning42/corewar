@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 10:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 23:41:41 by                  ###   ########.fr       */
+/*   Updated: 2017/04/14 13:33:07 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void				vm_loop(t_vm *vm)
 {
 	if (vm->config.nb_player < 1)
 		return ;
+	vm_put_players(vm);
 	while (42)
 	{
 		vm->config.cycle += 1;
+		vm->config.cycle_tot += 1;
 		if (ISBIT(vm->config.verb, VM_CYCLE_VERB))
 			vm_declare_cycle(vm);
 		vm_play_process(vm);

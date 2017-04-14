@@ -1,5 +1,12 @@
 #include "vm.h"
 
+static int			get_id(void)
+{
+	static int		i;
+
+	return (++i);
+}
+
 static void			vm_new_process\
 						(t_vm *vm, unsigned char *pc, int id, char *color)
 {
@@ -7,6 +14,7 @@ static void			vm_new_process\
 	t_process		process;
 
 	ft_bzero(&process, sizeof(process));
+	process.id = get_id();
 	process.player_id = id;
 	process.color = color;
 	process.pc = pc;

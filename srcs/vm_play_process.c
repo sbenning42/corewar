@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 18:42:52 by                  ###   ########.fr       */
+/*   Updated: 2017/04/14 11:01:28 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ static void				vm_handler_opcode_error(t_vm *vm, t_process *process)
 {
 	(void)vm;
 	(void)process;
+	process->pc += 1;
+	if (process->pc > (vm->memory + vm->gconfig.mem_size))
+		process->pc = vm->memory;
 }
 
 static t_vm_opcode_h	g_opcode_handler[] = {\

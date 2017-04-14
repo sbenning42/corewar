@@ -112,7 +112,6 @@ t_lexem            *ft_lex(void)
     lexem = lexem_new(max_analyze->id, max_analyze->key, *s_scan(), max);
     if (!lexem)
         return (NULL);
-	lexem_dump(lexem);
     *s_scan() += max;
     *s_offset() += max;
     return (lexem);

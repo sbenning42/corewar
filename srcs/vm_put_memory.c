@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 08:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 19:49:24 by                  ###   ########.fr       */
+/*   Updated: 2017/04/14 08:14:16 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void				vm_put_memory(t_vm *vm)
 	size_t			i;
 
 	i = 0;
-	vm_put_players(vm);
 	stop = vm->gconfig.mem_size / 64;
 	while (i < stop)
 	{

@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 19:46:24 by                  ###   ########.fr       */
+/*   Updated: 2017/04/14 13:32:36 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 /*
 **								define
 */
-
-# define LINUX
 
 # define VM_ERR_ARG             -1
 # define VM_AFF_ARG            	0
@@ -140,6 +138,7 @@ struct							s_vm_gconf
 struct							s_vm_conf
 {
     unsigned int				cycle;
+    unsigned int				cycle_tot;
 	unsigned int				nb_player;
 	unsigned int				nb_check;
 	unsigned int				nb_live;
@@ -198,6 +197,7 @@ struct                          s_player
 struct                          s_process
 {
 	int							player_id;
+	int							id;
     unsigned char				*pc;
     int                         registre[REG_NUMBER];
     unsigned int                carry;
@@ -422,7 +422,10 @@ int								vm_is_process_dead\
 */
 
 int								vm_get_direct_int_arg(unsigned char *pc);
+short							vm_get_direct_short_arg(unsigned char *pc);
 char							*vm_get_player_name(t_vm *vm, int id);
+unsigned char					vm_get_register_arg(unsigned char *pc);
+int								vm_get_multi_arg(unsigned char *pc, unsigned char ocp, int *size, int dsize);
 
 /*
 ********************************************************************************
@@ -443,8 +446,18 @@ void							vm_set_timer(t_process *p);
 */
 
 void							vm_declare_cycle(t_vm *vm);
-void							vm_declare_live(t_vm *vm);
+void							vm_declare_live(t_vm *vm, int id);
 void							vm_declare_win(t_vm *vm);
+
+/*
+********************************************************************************
+*/
+
+/*
+**								vm_put_instruction.c
+*/
+
+void							vm_put_instruction(t_vm *vm, t_process *p);
 
 /*
 ********************************************************************************
