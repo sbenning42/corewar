@@ -4,5 +4,5 @@
 .name		"helltrain"
 .comment	"choo-choo, motherf*****s !"
 
-ld %0, r2
-st r1, 211
+live %42
+live %42

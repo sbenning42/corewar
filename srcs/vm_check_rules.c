@@ -6,7 +6,7 @@
 /*   By:  <>                                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 19:32:58 by                   #+#    #+#             */
-/*   Updated: 2017/04/14 15:57:06 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:20:47 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int					vm_check_dump(t_vm *vm)
 {
 	if ((vm->config.dump > 0)\
-			&& (vm->config.cycle_tot == (size_t)vm->config.dump))
+			&& (vm->config.cycle_tot == vm->config.dump))
 	{
 		vm_put_memory(vm);
 		return (1);

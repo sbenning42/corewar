@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:56:52 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 15:43:29 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:17:52 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	vm_handler_opcode_ld(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+	/*unsigned char	*pc;
 	unsigned char	ocp;
 	int				arg;
 	int				size;
@@ -34,11 +36,13 @@ void	vm_handler_opcode_ld(t_vm *vm, t_process *p)
 		p->carry = 0;
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
-}
+*/}
 
 void	vm_handler_opcode_st(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+	/*unsigned char	*pc;
 	unsigned char	ocp;
 	int				val;
 	int				reg;
@@ -73,7 +77,7 @@ void	vm_handler_opcode_st(t_vm *vm, t_process *p)
 	}
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
-}
+*/}
 
 void	vm_handler_opcode_ldi(t_vm *vm, t_process *p)
 {
@@ -83,7 +87,9 @@ void	vm_handler_opcode_ldi(t_vm *vm, t_process *p)
 
 void				vm_handler_opcode_sti(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+/*	unsigned char	*pc;
 	unsigned char	ocp;
 	int				val;
 	int				arg;
@@ -114,7 +120,7 @@ void				vm_handler_opcode_sti(t_vm *vm, t_process *p)
 	ft_memcpy(p->pc + arg, &val, sizeof(int));
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
-}
+*/}
 
 void	vm_handler_opcode_fork(t_vm *vm, t_process *p)
 {

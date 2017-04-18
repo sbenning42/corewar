@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:36:06 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 15:25:48 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:56:44 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,79 +14,68 @@
 
 void	vm_handler_opcode_live(t_vm *vm, t_process *p)
 {
-	int	arg;
-	unsigned char *pc;
+	t_vm_arg	args;
+	int			id;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
 	p->live = 0;
-	pc += 1;
-	arg = vm_get_direct_int_arg(pc);
-	pc += 4;
 	vm->config.nb_live += 1;
-	if (!is_available_id(vm, arg))
+	vm_read_args(vm, g_op, p, &args);
+	id = args.args[0].val.int_v;
+	if (!is_available_id(vm, id))
 	{
-		vm->config.last_live_id = arg;
+		vm->config.last_live_id = id;
 		if (ISBIT(vm->config.verb, VM_LIVE_VERB))
 			vm_declare_live(vm, p->id);
 	}
-	p->pc += 5;
-	vm_set_timer(p);
+	vm_inc_pc(vm, &p->pc, 1 + args.size);
+	vm_set_timer(vm, p);
 }
 
 void	vm_handler_opcode_add(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
-	int				i1;
-	int				i2;
-	int				ires;
+	t_vm_arg	args;
+	int			i_res;
+	int			i_op1;
+	int			i_op2;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	i1 = vm_get_register_arg(pc);
-	pc += 1;
-	i2 = vm_get_register_arg(pc);
-	pc += 1;
-	ires = vm_get_register_arg(pc);
-	pc += 1;
-	p->registre[ires] = p->registre[i1] + p->registre[i2];
-	if (!p->registre[ires])
+	vm_read_args(vm, g_op + OP_ADD_I, p, &args);
+	i_op1 = (int)args.args[0].val.index;
+	i_op2 = (int)args.args[1].val.index;
+	i_res = (int)args.args[2].val.index;
+	p->registre[i_res] = p->registre[i_op1] + p->registre[i_op2];
+	if (!p->registre[i_res])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	p->pc += 4;
-	vm_set_timer(p);
+	vm_inc_pc(vm, &p->pc, 1 + args.size);
+	vm_set_timer(vm, p);
 }
 
 void	vm_handler_opcode_sub(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
-	int				i1;
-	int				i2;
-	int				ires;
+	t_vm_arg	args;
+	int			i_res;
+	int			i_op1;
+	int			i_op2;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	i1 = vm_get_register_arg(pc);
-	pc += 1;
-	i2 = vm_get_register_arg(pc);
-	pc += 1;
-	ires = vm_get_register_arg(pc);
-	pc += 1;
-	p->registre[ires] = p->registre[i1] - p->registre[i2];
-	if (!p->registre[ires])
+	vm_read_args(vm, g_op + OP_SUB_I, p, &args);
+	i_op1 = (int)args.args[0].val.index;
+	i_op2 = (int)args.args[1].val.index;
+	i_res = (int)args.args[2].val.index;
+	p->registre[i_res] = p->registre[i_op1] - p->registre[i_op2];
+	if (!p->registre[i_res])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	p->pc += 4;
-	vm_set_timer(p);
+	vm_inc_pc(vm, &p->pc, 1 + args.size);
+	vm_set_timer(vm, p);
 }
 
 void	vm_handler_opcode_aff(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+/*	unsigned char	*pc;
 
 	vm_put_instruction(vm, p);
 	pc = p->pc;
@@ -95,11 +84,13 @@ void	vm_handler_opcode_aff(t_vm *vm, t_process *p)
 		ft_printf("%c", p->registre[vm_get_register_arg(pc)] % 256);
 	p->pc += 3;
 	vm_set_timer(p);
-}
+*/}
 
 void		vm_handler_opcode_zjmp(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+/*	unsigned char	*pc;
 	short			arg;
 
 	vm_put_instruction(vm, p);
@@ -119,4 +110,4 @@ void		vm_handler_opcode_zjmp(t_vm *vm, t_process *p)
 	else
 		p->pc += 3;
 	vm_set_timer(p);
-}
+*/}

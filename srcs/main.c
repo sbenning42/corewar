@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 10:45:42 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 13:33:07 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 12:26:51 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int					vm_finish(t_vm *vm)
 
 void				vm_loop(t_vm *vm)
 {
-	if (vm->config.nb_player < 1)
-		return ;
 	vm_put_players(vm);
 	while (42)
 	{

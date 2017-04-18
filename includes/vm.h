@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 13:32:36 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:40:03 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,24 +124,24 @@ typedef struct s_process		t_process;
 struct							s_vm_gconf
 {
     unsigned int				max_player;
-    unsigned int				mem_size;
-    unsigned int				champ_max_size;
-    unsigned int				reg_number;
-    unsigned int				reg_size;
-    unsigned int				idx_mod;
-    unsigned int				cycle_to_die;
-    unsigned int				cycle_delta;
-    unsigned int				max_checks;
-    unsigned int				nbr_live;
+    int						mem_size;
+    int						champ_max_size;
+    int						reg_number;
+    int						reg_size;
+   	int						idx_mod;
+    int						cycle_to_die;
+    int						cycle_delta;
+    int						max_checks;
+    long int				nbr_live;
 };
 
 struct							s_vm_conf
 {
-    unsigned int				cycle;
-    unsigned int				cycle_tot;
+    long int					cycle;
+    long int					cycle_tot;
 	unsigned int				nb_player;
-	unsigned int				nb_check;
-	unsigned int				nb_live;
+	int							nb_check;
+	long int					nb_live;
     int							aff;
     int							dump;
     int							step;
@@ -185,12 +185,12 @@ struct							s_vm_opcode_h
 
 struct                          s_player
 {
-    int							id;
+    long int					id;
     header_t					header;
     t_file                      *file;
 	unsigned char				binary[CHAMP_MAX_SIZE];
 	size_t						binary_size;
-    unsigned char				*pc;
+    int							pc;
     char						*color;
 };
 
@@ -198,11 +198,11 @@ struct                          s_process
 {
 	int							player_id;
 	int							id;
-    unsigned char				*pc;
+    int							pc;
     int                         registre[REG_NUMBER];
     unsigned int                carry;
     unsigned int				timer;
-    unsigned int				live;
+    long int					live;
     int							dead;
 	char						*color;
 };
@@ -290,8 +290,8 @@ void							vm_handler_arg_champion(t_vm *vm, char *arg);
 **								vm_new_player.c
 */
 
-void							vm_new_player(t_vm *vm, char *name, int id);
-int								is_available_id(t_vm *vm, int id);
+void							vm_new_player(t_vm *vm, char *name, long int id);
+int								is_available_id(t_vm *vm, long int id);
 
 /*
 ********************************************************************************
@@ -435,7 +435,7 @@ int								vm_get_multi_arg(unsigned char *pc, unsigned char ocp, int *size, int
 **								vm_set.c
 */
 
-void							vm_set_timer(t_process *p);
+void							vm_set_timer(t_vm *vm, t_process *p);
 
 /*
 ********************************************************************************
@@ -446,7 +446,7 @@ void							vm_set_timer(t_process *p);
 */
 
 void							vm_declare_cycle(t_vm *vm);
-void							vm_declare_live(t_vm *vm, int id);
+void							vm_declare_live(t_vm *vm, long int id);
 void							vm_declare_win(t_vm *vm);
 
 /*
@@ -463,185 +463,41 @@ void							vm_put_instruction(t_vm *vm, t_process *p);
 ********************************************************************************
 */
 
-/*############################################################################*/
-/*############################################################################*/
-/*############################################################################*/
-/*
-# define VM_SINGLE              s_vm()
+typedef enum e_args_type	t_args_type;
+typedef union u_arg_val		t_arg_val;
+typedef struct s_ins_arg	t_ins_arg;
+typedef struct s_vm_arg		t_vm_arg;
 
-# define VM_A_CONFIG            VM_SINGLE->config
-# define VM_A_MEMORY            VM_SINGLE->memory
-# define VM_A_PLAYER            VM_SINGLE->player
-# define VM_A_PROCESS           VM_SINGLE->process
-
-# define VM_MNOTEXEC            "... is not a corewar executable."
-# define VM_MPNUSED             "prog_number ... already used."
-# define VM_MNOTACCESS          "File ... not accessible."
-# define VM_MMALLOC             "Can't perform malloc."
-# define VM_MUSAGE              "Usage: TODO (in vm.h, define VM_MUSAGE)"
-
-# define VM_MLIVE               "le joueur %u(%s) est en vie.\n"
-# define VM_MWIN                "le joueur %u(%s) a gagne.\n"
-# define VM_MDEAD               "Un process appartenant au joueur %u(%s) est mort.\n"
-
-# define VM_CONFIG1            "%30s : %lu\n%30s : %u\n%30s : %u\n%30s : %lu\n"
-# define VM_CONFIG2            "%30s : %lu\n%30s : %u\n%30s : %u\n%30s : %u\n"
-# define VM_CONFIG3            "%30s : %lu\n%30s : %u\n%30s : %u\n%30s : %lu\n"
-# define VM_CONFIG4            "%30s : %u\n%30s : %lu\n%30s : %d(%s)\n%30s : %d\n%s"
-# define VM_CONFIG_DUMP         VM_CONFIG1 VM_CONFIG2 VM_CONFIG3 VM_CONFIG4
-
-# define VM_MEM1                "%30s : %p\n%30s : %p\n%30s : %p\n"
-# define VM_MEM2                "%30s : %lu\n%30s : %lu\n%30s : %lu\n"
-# define VM_MEMORY_DUMP         VM_MEM1 VM_MEM2
-
-# define VM_PLAY1               "\t%30s : %d\n\t%30s : %s\n\t%30s : %ld\n"
-# define VM_PLAY2               "\t%30s : %p\n\t%30s : %s\n\t%30s : %s\n"
-# define VM_PLAYER_DUMP         VM_PLAY1 VM_PLAY2
-
-# define VM_PROC1               "\t%30s : %u\n\t%30s : %p\n\t%30s : %p\n\t%30s : %p\n"
-# define VM_PROC2               "\t%30s : %u\n\t%30s : %u\n\t%30s : %u\n"
-# define VM_PROC3               "\t%30s : %lu\n\t%30s : %d\n\t%30s : %p\n"
-# define VM_PROC4               "\t%30s : %p\n\t%30s : %u\n\t%30s : %lu\n"
-# define VM_PROCESS_DUMP        VM_PROC1 VM_PROC2 VM_PROC3 VM_PROC4
-
-# define VM_HEAD1               "\t%30s : %#x\n\t%30s : %s\n"
-# define VM_HEAD2               "\t%30s : %u\n\t%30s : %s\n"
-# define VM_HEADER_DUMP         VM_HEAD1 VM_HEAD2
-
-# include                       "op.h"
-# include                       "get_next_line.h"
-# include                       "proginfo.h"
-# include                       "ft_getopt.h"
-# include                       "ft_file.h"
-# include                       "libft.h"
-# include                       "vm_vverbose.h"
-
-typedef struct s_vm             t_vm;
-typedef struct s_vm_config      t_vm_config;
-typedef struct s_cbuff          t_cbuff;
-typedef struct s_process        t_process;
-typedef struct s_instruction    t_instruction;
-typedef struct s_player         t_player;
-typedef struct s_argd           t_argd;
-typedef struct s_efatal         t_efatal;
-
-typedef void                    (*t_arg_f)(char *);
-typedef void                    (*t_ins_player)(t_process *);
-
-struct                          s_instruction
+enum						e_args_type
 {
-    unsigned char               *code;
-    unsigned int                size;
-    t_op                        *op;
-    unsigned char               ocp;
-    unsigned char               *args;
+	vm_at_index,
+	vm_at_sh_dir,
+	vm_at_ind,
+	vm_at_int_dir
 };
 
-struct                          s_cbuff
+union						u_arg_val
 {
-    void                        *buffer;
-    void                        *end;
-    void                        *curs;
-    unsigned long               allocated_size;
-    unsigned long               used_size;
-    unsigned long               offset;
+	char					index;
+	short					short_v;
+	int						int_v;
+	char					mem[4];
+};
+
+struct						s_ins_arg
+{
+	t_args_type				type;
+	t_arg_val				val;
+};
+
+struct						s_vm_arg
+{
+	t_ins_arg				args[MAX_ARGS_NUMBER];
+	size_t					nb_arg;
+	size_t					size;
 };
 
 
-struct                          s_argd
-{
-    int                         type;
-    t_arg_f                     f;
-};
-
-struct                          s_efatal
-{
-    int                         error;
-    char                        *message;
-};
-*/
-/*
-**                              *** vm.c ***
-*/
-/*
-t_vm                            *s_vm(void);
-void                            vm_setup(void);
-int                             vm_finish(void);
-void                            vm_loop(void);
-void                            vm_cleanup(void);
-*/
-/*
-**                              *** vm_dump.c ***
-*/
-/*
-void                            vm_dump(int fd);
-*/
-/*
-**                              *** vm_dump_player.c ***
-*/
-/*
-void                            vm_dump_player_i(t_list *l);
-void							vm_put_players(void);
-*/
-/*
-**                              *** vm_load.c ***
-*/
-/*
-void                            vm_load_config(void);
-void                            vm_load_arguments(void);
-void                            vm_load_memory(void);
-void                            vm_load_player(void);
-void                            vm_load_root_process(void);
-*/
-/*
-**                              *** vm_load_benary.c ***
-*/
-/*
-void                            vm_load_binary(void);
-
-t_arg_f                         arg_dispatch(int type);
-void                            unknow_fatal(char *value);
-
-void                            arg_error_f(char *value);
-void                            arg_dump_f(char *value);
-void                            arg_pnum_f(char *value);
-void                            arg_oopt_f(char *value);
-void                            arg_param_f(char *value);
-
-void                            vm_create_player(char *file_name, int id);
-
-int                             cbuff_init\
-                                    (t_cbuff *cb, size_t size, size_t offset);
-void                            cbuff_cpy(t_cbuff *cb, void *src, size_t size);
-void                            cbuff_del(t_cbuff *cb);
-
-void                            vm_load_player_i(t_list *l);
-
-void                            vm_load_process_i(t_list *l);
-
-void							vm_play_process(t_list *l);
-void							vm_read_instruction(t_process *p);
-
-t_ins_player					vm_player_dispatch(unsigned int opcode);
-
-char							*vm_get_player_name(int id);
-
-int                             vm_error(int error);
-void                            vm_fatal(int fatal);
-
-void                            vm_del_player(void *content, size_t size);
-void                            vm_del_process(void *content, size_t size);
-
-void                            ft_print_memory(void *m, size_t size);
-void                            ft_print_legit_memory(void *m, size_t size);
-void                            vm_print_memory(void *m, size_t s, char *c, int rel);
-
-void							vm_declare_winner(void);
-void							vm_declare_live(void);
-void							vm_declare_dead(t_process *p);
-
-
-int								vm_finish_dump(void);
-int								vm_finish_live(void);
-*/
+void						vm_read_args(t_vm *vm, t_op *op, t_process *p, t_vm_arg *vmargs);
+void						vm_inc_pc(t_vm *vm, int *pc, int offset);
 #endif

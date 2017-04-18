@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 11:01:28 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:15:26 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void				vm_handler_opcode_error(t_vm *vm, t_process *process)
 	(void)vm;
 	(void)process;
 	process->pc += 1;
-	if (process->pc > (vm->memory + vm->gconfig.mem_size))
-		process->pc = vm->memory;
+	if (process->pc >= vm->gconfig.mem_size)
+		process->pc = 0;
 }
 
 static t_vm_opcode_h	g_opcode_handler[] = {\
@@ -62,7 +62,7 @@ static void				vm_play_process_i(t_vm *vm, t_process *process)
 		process->timer -= 1;
 		return ;
 	}
-	dispatch(*process->pc)(vm, process);
+	dispatch(vm->memory[process->pc])(vm, process);
 }
 
 void					vm_play_process(t_vm *vm)

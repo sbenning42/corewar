@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 10:24:20 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:35:16 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:56:45 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,66 +51,82 @@
 # define NBR_LIVE           21
 # define MAX_CHECKS         10
 
+# define OP_LIVE_I			0
 # define ASM_LIVE_ID		"live"
 # define ASM_LIVE_DESC		"alive"
 # define ASM_LIVE_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
+# define OP_LD_I			1
 # define ASM_LD_ID			"ld"
 # define ASM_LD_DESC		"load"
 # define ASM_LD_ARGS		T_DIR | T_IND, T_REG, T_NOP, T_NOP
 
+# define OP_ST_I			2
 # define ASM_ST_ID			"st"
 # define ASM_ST_DESC		"store"
 # define ASM_ST_ARGS		T_REG, T_REG | T_IND, T_NOP, T_NOP
 
+# define OP_ADD_I			3
 # define ASM_ADD_ID			"add"
 # define ASM_ADD_DESC		"addition"
 # define ASM_ADD_ARGS		T_REG, T_REG, T_REG, T_NOP
 
+# define OP_SUB_I			4
 # define ASM_SUB_ID			"sub"
 # define ASM_SUB_DESC		"soustraction"
 # define ASM_SUB_ARGS		T_REG, T_REG, T_REG, T_NOP
 
+# define OP__I
 # define ASM_AND_ID			"and"
 # define ASM_AND_DESC		"et (and  r1, r2, r3   r1&r2 -> r3"
 # define ASM_AND_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
+# define OP__I
 # define ASM_OR_ID			"or"
 # define ASM_OR_DESC		"ou  (or   r1, r2, r3   r1 | r2 -> r3"
 # define ASM_OR_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
+# define OP__I
 # define ASM_XOR_ID			"xor"
 # define ASM_XOR_DESC		"ou (xor  r1, r2, r3   r1^r2 -> r3"
 # define ASM_XOR_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
+# define OP__I
 # define ASM_ZJMP_ID		"zjmp"
 # define ASM_ZJMP_DESC		"jump if zero"
 # define ASM_ZJMP_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
+# define OP__I
 # define ASM_LDI_ID			"ldi"
 # define ASM_LDI_DESC		"load index"
 # define ASM_LDI_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG, T_NOP
 
+# define OP__I
 # define ASM_STI_ID			"sti"
 # define ASM_STI_DESC		"store index"
 # define ASM_STI_ARGS		T_REG, T_REG | T_DIR | T_IND, T_REG | T_DIR, T_NOP
 
+# define OP__I
 # define ASM_FORK_ID		"fork"
 # define ASM_FORK_DESC		"fork"
 # define ASM_FORK_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
+# define OP__I
 # define ASM_LLD_ID			"lld"
 # define ASM_LLD_DESC		"long load"
 # define ASM_LLD_ARGS		T_DIR | T_IND, T_REG, T_NOP, T_NOP
 
+# define OP__I
 # define ASM_LLDI_ID		"lldi"
 # define ASM_LLDI_DESC		"lomg load index"
 # define ASM_LLDI_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG, T_NOP
 
+# define OP__I
 # define ASM_LFORK_ID		"lfork"
 # define ASM_LFORK_DESC		"long fork"
 # define ASM_LFORK_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
+# define OP__I
 # define ASM_AFF_ID			"aff"
 # define ASM_AFF_DESC		"aff"
 # define ASM_AFF_ARGS		T_REG, T_NOP, T_NOP, T_NOP

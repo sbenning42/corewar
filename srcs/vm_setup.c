@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:14:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/13 15:24:57 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 12:27:03 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ void			vm_setup(t_vm *vm)
 	vm_load_gconfig(vm);
     set_args(g_key, g_regex, TABSIZE(g_regex));
 	vm_load_args(vm);
+	if (vm->config.nb_player < 1)
+		vm_fatal(VM_EUSAGE);
 	vm_load_process(vm);
 }

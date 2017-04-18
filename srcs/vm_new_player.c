@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 15:23:00 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 16:01:08 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:14:12 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char		*get_color(void)
 	return (color[(++i % TABSIZE(color))]);
 }
 
-int				is_available_id(t_vm *vm, int id)
+int				is_available_id(t_vm *vm, long int id)
 {
 	t_list		*l;
 
@@ -39,7 +39,7 @@ int				is_available_id(t_vm *vm, int id)
 	return (1);
 }
 
-static int		get_id(t_vm *vm, int id)
+static long int	get_id(t_vm *vm, long int id)
 {
 	if (id > 0)
 	{
@@ -81,12 +81,12 @@ static int		vm_check_champ_size(t_vm *vm, t_player *player)
 	return (0);
 }
 
-void			vm_new_player(t_vm *vm, char *name, int id)
+void			vm_new_player(t_vm *vm, char *name, long int id)
 {
 	t_player	player;
 	t_list		*l;
 
-	ft_bzero(&player, sizeof(player));
+	ft_bzero(&player, sizeof(t_player));
 	if (vm->config.nb_player >= vm->gconfig.max_player)
 		return ;
 	if (!(player.file = open_file(name, O_RDONLY)))
@@ -105,7 +105,7 @@ void			vm_new_player(t_vm *vm, char *name, int id)
 	close_file(&player.file);
 	player.id = get_id(vm, id);
 	player.color = get_color();
-	if (!(l = ft_lstnew(&player, sizeof(player))))
+	if (!(l = ft_lstnew(&player, sizeof(t_player))))
 		vm_fatal(VM_EMALLOC);
 	ft_lstadd_back(&vm->player, l);
 	vm->config.nb_player += 1;

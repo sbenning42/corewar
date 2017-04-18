@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:55:51 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 14:30:46 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/18 13:18:30 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void	vm_handler_opcode_and(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+	//unsigned char	*pc;
+/*
 	unsigned char	ocp;
 	int				size;
 	int				arg1;
@@ -46,11 +49,13 @@ void	vm_handler_opcode_and(t_vm *vm, t_process *p)
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
 	(void)vm;
-}
+*/}
 
 void	vm_handler_opcode_or(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+	/*unsigned char	*pc;
 	unsigned char	ocp;
 	int				size;
 	int				arg1;
@@ -81,11 +86,13 @@ void	vm_handler_opcode_or(t_vm *vm, t_process *p)
 	pc += 1;
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
-}
+*/}
 
 void	vm_handler_opcode_xor(t_vm *vm, t_process *p)
 {
-	unsigned char	*pc;
+	(void)vm;
+	(void)p;
+/*	unsigned char	*pc;
 	unsigned char	ocp;
 	int				size;
 	int				arg1;
@@ -116,4 +123,4 @@ void	vm_handler_opcode_xor(t_vm *vm, t_process *p)
 	pc += 1;
 	p->pc += (pc - p->pc);
 	vm_set_timer(p);
-}
+*/}
