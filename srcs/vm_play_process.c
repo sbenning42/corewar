@@ -6,19 +6,16 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:15:26 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 16:02:32 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-static void				vm_handler_opcode_error(t_vm *vm, t_process *process)
+static void				vm_handler_opcode_error(t_vm *vm, t_process *process, t_instruction *ins)
 {
-	(void)vm;
-	(void)process;
-	process->pc += 1;
-	if (process->pc >= vm->gconfig.mem_size)
-		process->pc = 0;
+	(void)ins;
+	process->pc = vm_pc(vm, process->pc + 1);
 }
 
 static t_vm_opcode_h	g_opcode_handler[] = {\
@@ -40,7 +37,7 @@ static t_vm_opcode_h	g_opcode_handler[] = {\
 	{0x10, vm_handler_opcode_aff}\
 };
 
-static void				(*dispatch(unsigned char op))(t_vm *, t_process *)
+static void				(*dispatch(unsigned char op))(t_vm *, t_process *, t_instruction *ins)
 {
 	size_t				i;
 
@@ -56,13 +53,18 @@ static void				(*dispatch(unsigned char op))(t_vm *, t_process *)
 
 static void				vm_play_process_i(t_vm *vm, t_process *process)
 {
+	t_instruction		ins;
+
 	process->live += 1;
 	if (process->timer > 1)
 	{
 		process->timer -= 1;
 		return ;
 	}
-	dispatch(vm->memory[process->pc])(vm, process);
+	ft_bzero(&ins, sizeof(t_instruction));
+	vm_read_instruction(vm, process->pc, &ins);
+	dispatch(ins.op)(vm, process, &ins);
+	vm_set_timer(vm, process);
 }
 
 void					vm_play_process(t_vm *vm)

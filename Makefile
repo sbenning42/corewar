@@ -54,7 +54,7 @@ SRC =			main.c\
                 vm_check_rules.c\
                 vm_declare.c\
 				vm_put_instruction.c\
-				vm_memory_access.c\
+				vm_access.c\
                 vm_del.c
 
 SRC_DIR =		srcs/

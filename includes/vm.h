@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:40:03 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 17:53:27 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,11 @@ typedef struct s_vm_args_h		t_vm_args_h;
 typedef struct s_vm_opcode_h	t_vm_opcode_h;
 typedef struct s_player			t_player;
 typedef struct s_process		t_process;
+typedef union u_swap			t_swap;
+typedef enum e_e_insarg			t_e_insarg;
+typedef struct s_insarg_i		t_insarg_i;
+typedef struct s_instruction	t_instruction;
+
 
 /*
 ********************************************************************************
@@ -177,10 +182,41 @@ struct							s_vm_args_h
 	void						(*func)(t_vm *, char *);
 };
 
+union							u_swap
+{
+	char						u_char;
+	short						u_short;
+	int							u_int;
+	char						u_tab[4];
+};
+
+enum							e_e_insarg
+{
+	reg_arg,
+	dir_arg,
+	ind_arg
+};
+
+struct							s_insarg_i
+{
+	t_e_insarg					type;
+	int							value;
+};
+
+struct							s_instruction
+{
+	int							pc;
+	unsigned char				op;
+	unsigned char				ocp;
+	t_insarg_i					args[4];
+	int							nb_arg;
+	int							size;
+};
+
 struct							s_vm_opcode_h
 {
 	unsigned char				opcode;
-	void						(*func)(t_vm *, t_process *);
+	void						(*func)(t_vm *, t_process *, t_instruction *);
 };
 
 struct                          s_player
@@ -199,14 +235,13 @@ struct                          s_process
 	int							player_id;
 	int							id;
     int							pc;
-    int                         registre[REG_NUMBER];
+    int                         registre[REG_NUMBER + 1];
     unsigned int                carry;
     unsigned int				timer;
     long int					live;
     int							dead;
 	char						*color;
 };
-
 
 /*
 ********************************************************************************
@@ -301,9 +336,12 @@ int								is_available_id(t_vm *vm, long int id);
 **								vm_load_process.c
 */
 
+void							vm_put_pc_move(t_vm *vm, int pc_start, int offset, t_instruction *ins);
 void							vm_load_process(t_vm *vm);
 void							vm_put_memory(t_vm *vm);
 void							vm_put_players(t_vm *vm);
+void							vm_new_process(t_vm *vm, int pc, long int id, char *color);
+void							vm_new_fprocess(t_vm *vm, int pc, t_process *p);
 
 /*
 ********************************************************************************
@@ -323,11 +361,11 @@ void							vm_play_process(t_vm *vm);
 **								vm_handler_opcode_first_set.c
 */
 
-void							vm_handler_opcode_live(t_vm *vm, t_process *p);
-void							vm_handler_opcode_add(t_vm *vm, t_process *p);
-void							vm_handler_opcode_sub(t_vm *vm, t_process *p);
-void							vm_handler_opcode_aff(t_vm *vm, t_process *p);
-void							vm_handler_opcode_zjmp(t_vm *vm, t_process *p);
+void							vm_handler_opcode_live(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_add(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_sub(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_aff(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_zjmp(t_vm *vm, t_process *p, t_instruction *ins);
 
 /*
 ********************************************************************************
@@ -337,9 +375,9 @@ void							vm_handler_opcode_zjmp(t_vm *vm, t_process *p);
 **								vm_handler_opcode_second_set.c
 */
 
-void							vm_handler_opcode_and(t_vm *vm, t_process *p);
-void							vm_handler_opcode_or(t_vm *vm, t_process *p);
-void							vm_handler_opcode_xor(t_vm *vm, t_process *p);
+void							vm_handler_opcode_and(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_or(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_xor(t_vm *vm, t_process *p, t_instruction *ins);
 
 /*
 ********************************************************************************
@@ -349,11 +387,11 @@ void							vm_handler_opcode_xor(t_vm *vm, t_process *p);
 **								vm_handler_opcode_third_set.c
 */
 
-void							vm_handler_opcode_ld(t_vm *vm, t_process *p);
-void							vm_handler_opcode_st(t_vm *vm, t_process *p);
-void							vm_handler_opcode_ldi(t_vm *vm, t_process *p);
-void							vm_handler_opcode_sti(t_vm *vm, t_process *p);
-void							vm_handler_opcode_fork(t_vm *vm, t_process *p);
+void							vm_handler_opcode_ld(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_st(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_ldi(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_sti(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_fork(t_vm *vm, t_process *p, t_instruction *ins);
 
 /*
 ********************************************************************************
@@ -363,9 +401,9 @@ void							vm_handler_opcode_fork(t_vm *vm, t_process *p);
 **								vm_handler_opcode_fourth_set.c
 */
 
-void							vm_handler_opcode_lld(t_vm *vm, t_process *p);
-void							vm_handler_opcode_lldi(t_vm *vm, t_process *p);
-void							vm_handler_opcode_lfork(t_vm *vm, t_process *p);
+void							vm_handler_opcode_lld(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_lldi(t_vm *vm, t_process *p, t_instruction *ins);
+void							vm_handler_opcode_lfork(t_vm *vm, t_process *p, t_instruction *ins);
 
 /*
 ********************************************************************************
@@ -418,20 +456,6 @@ int								vm_is_process_dead\
 */
 
 /*
-**								vm_get.c
-*/
-
-int								vm_get_direct_int_arg(unsigned char *pc);
-short							vm_get_direct_short_arg(unsigned char *pc);
-char							*vm_get_player_name(t_vm *vm, int id);
-unsigned char					vm_get_register_arg(unsigned char *pc);
-int								vm_get_multi_arg(unsigned char *pc, unsigned char ocp, int *size, int dsize);
-
-/*
-********************************************************************************
-*/
-
-/*
 **								vm_set.c
 */
 
@@ -457,47 +481,26 @@ void							vm_declare_win(t_vm *vm);
 **								vm_put_instruction.c
 */
 
-void							vm_put_instruction(t_vm *vm, t_process *p);
+void							vm_put_instruction(t_vm *vm, t_process *p, t_instruction *ins);
 
 /*
 ********************************************************************************
 */
 
-typedef enum e_args_type	t_args_type;
-typedef union u_arg_val		t_arg_val;
-typedef struct s_ins_arg	t_ins_arg;
-typedef struct s_vm_arg		t_vm_arg;
+/*
+**								vm_access.c
+*/
 
-enum						e_args_type
-{
-	vm_at_index,
-	vm_at_sh_dir,
-	vm_at_ind,
-	vm_at_int_dir
-};
+unsigned char					bin_access(t_vm *vm, int pc);
+void							vm_read_instruction(t_vm *vm, int pc, t_instruction *ins);
+int								access_arg_value(t_insarg_i *arg, t_vm *vm, t_process *p);
+void							write_int(t_vm *vm, int *pc, int value);
+int								read_int(t_vm *vm, int *pc);
+int								vm_pc(t_vm *vm, int pc);
 
-union						u_arg_val
-{
-	char					index;
-	short					short_v;
-	int						int_v;
-	char					mem[4];
-};
+/*
+********************************************************************************
+*/
 
-struct						s_ins_arg
-{
-	t_args_type				type;
-	t_arg_val				val;
-};
-
-struct						s_vm_arg
-{
-	t_ins_arg				args[MAX_ARGS_NUMBER];
-	size_t					nb_arg;
-	size_t					size;
-};
-
-
-void						vm_read_args(t_vm *vm, t_op *op, t_process *p, t_vm_arg *vmargs);
-void						vm_inc_pc(t_vm *vm, int *pc, int offset);
+char				*vm_get_player_name(t_vm *vm, int id);
 #endif

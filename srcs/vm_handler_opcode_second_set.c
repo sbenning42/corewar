@@ -6,121 +6,65 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:55:51 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:18:30 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 16:49:57 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	vm_handler_opcode_and(t_vm *vm, t_process *p)
+void	vm_handler_opcode_and(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	(void)vm;
-	(void)p;
-	//unsigned char	*pc;
-/*
-	unsigned char	ocp;
-	int				size;
-	int				arg1;
-	int				arg2;
-	int				val;
+	int				op1;
+	int				op2;
+	int				index;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	ocp = *pc;
-	pc += 1;
-	arg1 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg1 = p->registre[arg1];
-	pc += size;
-	ocp <<= 0x02;
-	arg2 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg2 = p->registre[arg2];
-	pc += size;
-	ocp <<= 0x02;
-	val = arg1 & arg2;
-	if (!val)
+	vm_put_instruction(vm, p, ins);
+	index = ins->args[2].value;
+	op1 = access_arg_value(ins->args, vm, p);
+	op2 = access_arg_value(ins->args + 1, vm, p);
+	p->registre[index] = op1 & op2;
+	if (!p->registre[index])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	p->registre[vm_get_register_arg(pc)] = val;
-	pc += 1;
-	p->pc += (pc - p->pc);
-	vm_set_timer(p);
-	(void)vm;
-*/}
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
+}
 
-void	vm_handler_opcode_or(t_vm *vm, t_process *p)
+void	vm_handler_opcode_or(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	(void)vm;
-	(void)p;
-	/*unsigned char	*pc;
-	unsigned char	ocp;
-	int				size;
-	int				arg1;
-	int				arg2;
-	int				val;
+	int				op1;
+	int				op2;
+	int				index;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	ocp = *pc;
-	pc += 1;
-	arg1 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg1 = p->registre[arg1];
-	pc += size;
-	ocp <<= 0x02;
-	arg2 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg2 = p->registre[arg2];
-	pc += size;
-	ocp <<= 0x02;
-	val = arg1 | arg2;
-	if (!val)
+	vm_put_instruction(vm, p, ins);
+	index = ins->args[2].value;
+	op1 = access_arg_value(ins->args, vm, p);
+	op2 = access_arg_value(ins->args + 1, vm, p);
+	p->registre[index] = op1 | op2;
+	if (!p->registre[index])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	p->registre[vm_get_register_arg(pc)] = val;
-	pc += 1;
-	p->pc += (pc - p->pc);
-	vm_set_timer(p);
-*/}
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
+}
 
-void	vm_handler_opcode_xor(t_vm *vm, t_process *p)
+void	vm_handler_opcode_xor(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	(void)vm;
-	(void)p;
-/*	unsigned char	*pc;
-	unsigned char	ocp;
-	int				size;
-	int				arg1;
-	int				arg2;
-	int				val;
+	int				op1;
+	int				op2;
+	int				index;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	ocp = *pc;
-	pc += 1;
-	arg1 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg1 = p->registre[arg1];
-	pc += size;
-	ocp <<= 0x02;
-	arg2 = vm_get_multi_arg(pc, ocp, &size, 4);
-	if (size == 1)
-		arg2 = p->registre[arg2];
-	pc += size;
-	ocp <<= 0x02;
-	val = ((arg1 & ~arg2) | (~arg1 & arg2));
-	if (!val)
+	vm_put_instruction(vm, p, ins);
+	index = ins->args[2].value;
+	op1 = access_arg_value(ins->args, vm, p);
+	op2 = access_arg_value(ins->args + 1, vm, p);
+	p->registre[index] = ((op1 & ~op2) | (~op1 & op2));
+	if (!p->registre[index])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	p->registre[vm_get_register_arg(pc)] = val;
-	pc += 1;
-	p->pc += (pc - p->pc);
-	vm_set_timer(p);
-*/}
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
+}

@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 15:23:00 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:14:12 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 16:25:52 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,8 @@ int				is_available_id(t_vm *vm, long int id)
 
 static long int	get_id(t_vm *vm, long int id)
 {
-	if (id > 0)
-	{
-		if (is_available_id(vm, id))
-			return (id);
-	}
-	id = 0;
-	while (!is_available_id(vm, ++id))
-		;
+	while (!is_available_id(vm, id))
+		--id;
 	return (id);
 }
 

@@ -6,108 +6,95 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:36:06 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:56:44 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 16:44:31 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vm.h"
 
-void	vm_handler_opcode_live(t_vm *vm, t_process *p)
+void	vm_handler_opcode_live(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	t_vm_arg	args;
 	int			id;
 
+	vm_put_instruction(vm, p, ins);
 	p->live = 0;
 	vm->config.nb_live += 1;
-	vm_read_args(vm, g_op, p, &args);
-	id = args.args[0].val.int_v;
+	id = ins->args[0].value;
 	if (!is_available_id(vm, id))
 	{
 		vm->config.last_live_id = id;
 		if (ISBIT(vm->config.verb, VM_LIVE_VERB))
 			vm_declare_live(vm, p->id);
 	}
-	vm_inc_pc(vm, &p->pc, 1 + args.size);
-	vm_set_timer(vm, p);
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
 }
 
-void	vm_handler_opcode_add(t_vm *vm, t_process *p)
+void	vm_handler_opcode_add(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	t_vm_arg	args;
 	int			i_res;
 	int			i_op1;
 	int			i_op2;
 
-	vm_read_args(vm, g_op + OP_ADD_I, p, &args);
-	i_op1 = (int)args.args[0].val.index;
-	i_op2 = (int)args.args[1].val.index;
-	i_res = (int)args.args[2].val.index;
+	vm_put_instruction(vm, p, ins);
+	i_op1 = ins->args[0].value;
+	i_op2 = ins->args[1].value;
+	i_res = ins->args[2].value;
 	p->registre[i_res] = p->registre[i_op1] + p->registre[i_op2];
 	if (!p->registre[i_res])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	vm_inc_pc(vm, &p->pc, 1 + args.size);
-	vm_set_timer(vm, p);
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
 }
 
-void	vm_handler_opcode_sub(t_vm *vm, t_process *p)
+void	vm_handler_opcode_sub(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	t_vm_arg	args;
 	int			i_res;
 	int			i_op1;
 	int			i_op2;
 
-	vm_read_args(vm, g_op + OP_SUB_I, p, &args);
-	i_op1 = (int)args.args[0].val.index;
-	i_op2 = (int)args.args[1].val.index;
-	i_res = (int)args.args[2].val.index;
+	vm_put_instruction(vm, p, ins);
+	i_op1 = ins->args[0].value;
+	i_op2 = ins->args[1].value;
+	i_res = ins->args[2].value;
 	p->registre[i_res] = p->registre[i_op1] - p->registre[i_op2];
 	if (!p->registre[i_res])
 		p->carry = 1;
 	else
 		p->carry = 0;
-	vm_inc_pc(vm, &p->pc, 1 + args.size);
-	vm_set_timer(vm, p);
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
 }
 
-void	vm_handler_opcode_aff(t_vm *vm, t_process *p)
+void	vm_handler_opcode_aff(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	(void)vm;
-	(void)p;
-/*	unsigned char	*pc;
+	int	index;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 2;
+	vm_put_instruction(vm, p, ins);
+	index = ins->args[0].value;
 	if (vm->config.aff > 0)
-		ft_printf("%c", p->registre[vm_get_register_arg(pc)] % 256);
-	p->pc += 3;
-	vm_set_timer(p);
-*/}
+		ft_printf("%c", p->registre[index] % 256);
+	vm_put_pc_move(vm, p->pc, ins->size, ins);
+	p->pc = vm_pc(vm, p->pc + ins->size);
+}
 
-void		vm_handler_opcode_zjmp(t_vm *vm, t_process *p)
+void		vm_handler_opcode_zjmp(t_vm *vm, t_process *p, t_instruction *ins)
 {
-	(void)vm;
-	(void)p;
-/*	unsigned char	*pc;
-	short			arg;
+	int				offset;
 
-	vm_put_instruction(vm, p);
-	pc = p->pc;
-	pc += 1;
-	arg = vm_get_direct_short_arg(pc);
-	if (arg < 0)
+	vm_put_instruction(vm, p, ins);
+	offset = ins->args[0].value;
+	offset %= vm->gconfig.idx_mod;
+	if (p->carry)
 	{
-		arg *= -1;
-		arg = arg % vm->gconfig.idx_mod;
-		arg *= -1;
+		vm_put_pc_move(vm, p->pc, offset, ins);
+		p->pc = vm_pc(vm, p->pc + offset);
 	}
 	else
-		arg = arg % vm->gconfig.idx_mod;
-	if (p->carry)
-		p->pc += arg;
-	else
-		p->pc += 3;
-	vm_set_timer(p);
-*/}
+	{
+		vm_put_pc_move(vm, p->pc, ins->size, ins);
+		p->pc = vm_pc(vm, p->pc + ins->size);
+	}
+}

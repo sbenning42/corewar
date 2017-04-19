@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:11:35 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/14 13:46:08 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 19:37:56 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void		vm_check_process_i(t_vm *vm, t_process *p)
 	{
 		p->dead = 1;
 		if (ISBIT(vm->config.verb, VM_DEATH_VERB))
-			ft_printf("Process %d hasn't lived for %u cycle (CDT %u)\n",\
-					p->player_id,\
+			ft_printf("Process %lld hasn't lived for %u cycle (CDT %u)\n",\
+					p->id,\
 					p->live,\
 					vm->gconfig.cycle_to_die);
 	}

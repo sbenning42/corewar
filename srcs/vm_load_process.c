@@ -7,7 +7,7 @@ static long int		get_id(void)
 	return (++i);
 }
 
-static void			vm_new_process\
+void				vm_new_process\
 						(t_vm *vm, int pc, long int id, char *color)
 {
 	t_list			*l;
@@ -20,6 +20,28 @@ static void			vm_new_process\
 	process.pc = pc;
 	process.registre[0] = pc;
 	process.registre[1] = id;
+	vm_set_timer(vm, &process);
+	if (!(l = ft_lstnew(&process, sizeof(t_process))))
+		vm_fatal(VM_EMALLOC);
+	ft_lstadd(&vm->process, l);
+}
+
+void				vm_new_fprocess\
+						(t_vm *vm, int pc, t_process *p)
+{
+	t_list			*l;
+	t_process		process;
+	int				i;
+
+	ft_bzero(&process, sizeof(t_process));
+	process.id = get_id();
+	process.player_id = p->player_id;
+	process.color = p->color;
+	process.pc = pc;
+	process.registre[0] = 0;
+	i = 0;
+	while (++i < 17)
+		process.registre[i] = p->registre[i];
 	vm_set_timer(vm, &process);
 	if (!(l = ft_lstnew(&process, sizeof(t_process))))
 		vm_fatal(VM_EMALLOC);
