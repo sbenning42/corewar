@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 15:14:03 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/19 18:28:07 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:45:51 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,12 +235,12 @@ unsigned char		make_ocp(t_op op)
 	return (ocp);
 }
 
-void				vm_read_instruction(t_vm *vm, int pc, t_instruction *ins)
+void				vm_read_instruction(t_vm *vm, int pc, t_instruction *ins, unsigned char opcode)
 {
 	int				op_index;
 
 	ins->pc = pc;
-	ins->op = bin_access(vm, pc);
+	ins->op = opcode;
 	pc = vm_pc(vm, pc + 1);
 	ins->size = 1;
 	op_index = get_op_index(ins->op);
@@ -257,10 +257,20 @@ void				vm_read_instruction(t_vm *vm, int pc, t_instruction *ins)
 	fill_args(ins, vm, pc, g_op[op_index].label_size);
 }
 
-int				access_reg_arg(t_insarg_i *arg, t_process *p)
+int				check_reg_index(t_vm *vm, int i)
+{
+	if (i < 1 || i > vm->gconfig.reg_number)
+		return (-1);
+	return (0);
+}
+
+int				access_reg_arg(t_insarg_i *arg, t_process *p, int *err)
 {
 	if (arg->value < 1 || arg->value > 16)
+	{
+		*err = 1;
 		return (0);
+	}
 	return (p->registre[arg->value]);
 }
 
@@ -277,10 +287,11 @@ int				access_ind_arg(t_insarg_i *arg, t_vm *vm, t_process *p)
 	return (read_int(vm, &pc));
 }
 
-int				access_arg_value(t_insarg_i *arg, t_vm *vm, t_process *p)
+int				access_arg_value(t_insarg_i *arg, t_vm *vm, t_process *p, int *err)
 {
+	*err = 0;
 	if (arg->type == reg_arg)
-		return (access_reg_arg(arg, p));
+		return (access_reg_arg(arg, p, err));
 	else if (arg->type == dir_arg)
 		return (access_dir_arg(arg));
 	return (access_ind_arg(arg, vm, p));

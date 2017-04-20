@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/19 17:53:27 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:46:23 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,7 @@ struct                          s_process
     int                         registre[REG_NUMBER + 1];
     unsigned int                carry;
     unsigned int				timer;
+	unsigned char				opcode;
     long int					live;
     int							dead;
 	char						*color;
@@ -492,11 +493,12 @@ void							vm_put_instruction(t_vm *vm, t_process *p, t_instruction *ins);
 */
 
 unsigned char					bin_access(t_vm *vm, int pc);
-void							vm_read_instruction(t_vm *vm, int pc, t_instruction *ins);
-int								access_arg_value(t_insarg_i *arg, t_vm *vm, t_process *p);
+void							vm_read_instruction(t_vm *vm, int pc, t_instruction *ins, unsigned char opcode);
+int								access_arg_value(t_insarg_i *arg, t_vm *vm, t_process *p, int *err);
 void							write_int(t_vm *vm, int *pc, int value);
 int								read_int(t_vm *vm, int *pc);
 int								vm_pc(t_vm *vm, int pc);
+int								check_reg_index(t_vm *vm, int i);
 
 /*
 ********************************************************************************

@@ -18,7 +18,6 @@ void				vm_new_process\
 	process.player_id = id;
 	process.color = color;
 	process.pc = pc;
-	process.registre[0] = pc;
 	process.registre[1] = id;
 	vm_set_timer(vm, &process);
 	if (!(l = ft_lstnew(&process, sizeof(t_process))))
@@ -38,6 +37,8 @@ void				vm_new_fprocess\
 	process.player_id = p->player_id;
 	process.color = p->color;
 	process.pc = pc;
+	process.carry = p->carry;
+	process.live = p->live;
 	process.registre[0] = 0;
 	i = 0;
 	while (++i < 17)

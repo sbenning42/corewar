@@ -1,5 +1,5 @@
 Introducing contestants...
-* Player 1, weighing 23 bytes, "zork" ("I'M ALIIIIVE") !
+* Player 1, weighing 8 bytes, "TEST" ("test each instruction") !
 It is now cycle 1
 It is now cycle 2
 It is now cycle 3
@@ -800,6 +800,8 @@ It is now cycle 797
 It is now cycle 798
 It is now cycle 799
 It is now cycle 800
+P    1 | fork 3 (3)
+ADV 3 (0x0000 -> 0x0003) 0c 00 03 
 It is now cycle 801
 It is now cycle 802
 It is now cycle 803
@@ -810,6 +812,10 @@ It is now cycle 807
 It is now cycle 808
 It is now cycle 809
 It is now cycle 810
+P    2 | live 0
+ADV 5 (0x0003 -> 0x0008) 01 00 00 00 00 
+P    1 | live 0
+ADV 5 (0x0003 -> 0x0008) 01 00 00 00 00 
 It is now cycle 811
 It is now cycle 812
 It is now cycle 813
@@ -3072,4 +3078,6 @@ It is now cycle 3069
 It is now cycle 3070
 It is now cycle 3071
 It is now cycle 3072
-Contestant 1, "zork", has won !
+Process 2 hasn't lived for 2262 cycles (CTD 1536)
+Process 1 hasn't lived for 2262 cycles (CTD 1536)
+Contestant 1, "TEST", has won !

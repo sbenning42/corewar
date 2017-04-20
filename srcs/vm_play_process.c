@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/10 13:20:49 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/19 16:02:32 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 11:45:51 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void				vm_play_process_i(t_vm *vm, t_process *process)
 		return ;
 	}
 	ft_bzero(&ins, sizeof(t_instruction));
-	vm_read_instruction(vm, process->pc, &ins);
+	vm_read_instruction(vm, process->pc, &ins, process->opcode);
 	dispatch(ins.op)(vm, process, &ins);
 	vm_set_timer(vm, process);
 }

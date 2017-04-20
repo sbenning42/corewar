@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/22 10:24:20 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/18 13:56:45 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/19 13:15:58 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,57 +76,57 @@
 # define ASM_SUB_DESC		"soustraction"
 # define ASM_SUB_ARGS		T_REG, T_REG, T_REG, T_NOP
 
-# define OP__I
+# define OP_AND_I			5
 # define ASM_AND_ID			"and"
 # define ASM_AND_DESC		"et (and  r1, r2, r3   r1&r2 -> r3"
 # define ASM_AND_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
-# define OP__I
+# define OP_OR_I			6
 # define ASM_OR_ID			"or"
 # define ASM_OR_DESC		"ou  (or   r1, r2, r3   r1 | r2 -> r3"
 # define ASM_OR_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
-# define OP__I
+# define OP_XOR_I			7
 # define ASM_XOR_ID			"xor"
 # define ASM_XOR_DESC		"ou (xor  r1, r2, r3   r1^r2 -> r3"
 # define ASM_XOR_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG, T_NOP
 
-# define OP__I
+# define OP_ZJMP_I			8
 # define ASM_ZJMP_ID		"zjmp"
 # define ASM_ZJMP_DESC		"jump if zero"
 # define ASM_ZJMP_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
-# define OP__I
+# define OP_LDI_I			9
 # define ASM_LDI_ID			"ldi"
 # define ASM_LDI_DESC		"load index"
 # define ASM_LDI_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG, T_NOP
 
-# define OP__I
+# define OP_STI_I			10
 # define ASM_STI_ID			"sti"
 # define ASM_STI_DESC		"store index"
 # define ASM_STI_ARGS		T_REG, T_REG | T_DIR | T_IND, T_REG | T_DIR, T_NOP
 
-# define OP__I
+# define OP_FORK_I			11
 # define ASM_FORK_ID		"fork"
 # define ASM_FORK_DESC		"fork"
 # define ASM_FORK_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
-# define OP__I
+# define OP_LLD_I			12
 # define ASM_LLD_ID			"lld"
 # define ASM_LLD_DESC		"long load"
 # define ASM_LLD_ARGS		T_DIR | T_IND, T_REG, T_NOP, T_NOP
 
-# define OP__I
+# define OP_LLDI_I			13
 # define ASM_LLDI_ID		"lldi"
 # define ASM_LLDI_DESC		"lomg load index"
 # define ASM_LLDI_ARGS		T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG, T_NOP
 
-# define OP__I
+# define OP_LFORK_I			14
 # define ASM_LFORK_ID		"lfork"
 # define ASM_LFORK_DESC		"long fork"
 # define ASM_LFORK_ARGS		T_DIR, T_NOP, T_NOP, T_NOP
 
-# define OP__I
+# define OP_AFF_I			15
 # define ASM_AFF_ID			"aff"
 # define ASM_AFF_DESC		"aff"
 # define ASM_AFF_ARGS		T_REG, T_NOP, T_NOP, T_NOP
