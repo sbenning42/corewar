@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 15:14:03 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/20 11:45:51 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 17:46:40 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,9 @@ void				vm_read_instruction(t_vm *vm, int pc, t_instruction *ins, unsigned char 
 	int				op_index;
 
 	ins->pc = pc;
-	ins->op = opcode;
+	//ins->op = opcode;
+	(void)opcode;
+	ins->op = bin_access(vm, pc);
 	pc = vm_pc(vm, pc + 1);
 	ins->size = 1;
 	op_index = get_op_index(ins->op);

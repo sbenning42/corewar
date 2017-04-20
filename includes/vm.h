@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 10:51:41 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/20 11:46:23 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 16:01:55 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,9 +238,10 @@ struct                          s_process
     int                         registre[REG_NUMBER + 1];
     unsigned int                carry;
     unsigned int				timer;
-	unsigned char				opcode;
     long int					live;
     int							dead;
+	unsigned char				opcode;
+//	t_instruction				ins;
 	char						*color;
 };
 

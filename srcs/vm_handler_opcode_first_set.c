@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:36:06 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/20 09:58:47 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 16:16:49 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	vm_handler_opcode_live(t_vm *vm, t_process *p, t_instruction *ins)
 {
 	int			id;
 
-	vm_put_instruction(vm, p, ins);
 	p->live = 0;
+	vm_put_instruction(vm, p, ins);
 	vm->config.nb_live += 1;
 	id = ins->args[0].value;
 	if (!is_available_id(vm, id))
@@ -107,7 +107,7 @@ void		vm_handler_opcode_zjmp(t_vm *vm, t_process *p, t_instruction *ins)
 	vm_put_instruction(vm, p, ins);
 	if (p->carry)
 	{
-		vm_put_pc_move(vm, p->pc, offset, ins);
+		//vm_put_pc_move(vm, p->pc, offset, ins);
 		p->pc = vm_pc(vm, p->pc + offset);
 	}
 	else

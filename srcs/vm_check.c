@@ -6,7 +6,7 @@
 /*   By: sbenning <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 14:11:35 by sbenning          #+#    #+#             */
-/*   Updated: 2017/04/19 19:37:56 by sbenning         ###   ########.fr       */
+/*   Updated: 2017/04/20 13:40:31 by sbenning         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		vm_check_process_i(t_vm *vm, t_process *p)
 	{
 		p->dead = 1;
 		if (ISBIT(vm->config.verb, VM_DEATH_VERB))
-			ft_printf("Process %lld hasn't lived for %u cycle (CDT %u)\n",\
+			ft_printf("Process %lld hasn't lived for %u cycles (CTD %u)\n",\
 					p->id,\
 					p->live,\
 					vm->gconfig.cycle_to_die);
@@ -47,7 +47,7 @@ void		vm_check_live(t_vm *vm)
 		else
 			vm->gconfig.cycle_to_die = 0;
 		if (ISBIT(vm->config.verb, VM_CYCLE_VERB))
-			ft_printf("Cycle to die is now %u (nb_live)\n", vm->gconfig.cycle_to_die);
+			ft_printf("Cycle to die is now %d (nb_live)\n", vm->gconfig.cycle_to_die);
 		vm->config.nb_check = 0;
 	}
 	else
@@ -64,7 +64,7 @@ void		vm_check_checks(t_vm *vm)
 		else
 			vm->gconfig.cycle_to_die = 0;
 		if (ISBIT(vm->config.verb, VM_CYCLE_VERB))
-			ft_printf("Cycle to die is now %u (check)\n", vm->gconfig.cycle_to_die);
+			ft_printf("Cycle to die is now %d (check)\n", vm->gconfig.cycle_to_die);
 		vm->config.nb_check = 0;
 	}
 }

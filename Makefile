@@ -90,11 +90,15 @@ FLAG =			-Wall -Wextra -Werror
 
 all : $(ABS_OBJ_LIBFT) $(NAME)
 
-$(NAME) : $(ABS_OBJ)
+$(NAME) :  $(ABS_OBJ)
 	$(CC) $(FLAG) -g -o $@ $^ -L$(LIBFT_DIR) -l$(LIBFT)
 
 $(COR_OBJ) : $(COR_SRC) $(ABS_DEPEND)
+	@mkdir -p obj
 	$(CC) $(FLAG) -g -o $@ -c $< -I$(HEADER) -I$(LIBFT_HEADER)
+
+$(OBJ_DIR) :
+	mkdir $(OBJ_DIR)
 
 $(ABS_OBJ_LIBFT) :
 	make -C $(LIBFT_DIR)
